@@ -7,6 +7,7 @@ import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOServer;
 import org.json.simple.JSONObject;
 import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -27,6 +28,11 @@ public class WebSocketService extends Service{
         this(3000, "localhost");
     }
 
+    public WebSocketService(List<AppComponent> components) {
+        this();
+        this.components = components;
+    }
+
     /**
      * Constructor con parámetros no default
      * @param PORT Puerto del hostname
@@ -34,6 +40,7 @@ public class WebSocketService extends Service{
      */
     public WebSocketService(int PORT, String HOSTNAME) {
         super();
+        this.id = "WebSocket";
         this.config = new Configuration();
         this.config.setHostname(HOSTNAME);
         this.config.setPort(PORT);
@@ -77,7 +84,7 @@ public class WebSocketService extends Service{
                 server.getBroadcastOperations().sendEvent(c.getID(), c.valoresRealesActuales); // Enviar evento a WebSocket del componente específico
                 //System.out.println("Bradcast de: " + c.getID());
             }
-            Thread.sleep(10);
+            Thread.sleep(100);
         }catch (Exception e){
             e.printStackTrace(); // Sólo se hace print, el sistema no se puede caer
         }

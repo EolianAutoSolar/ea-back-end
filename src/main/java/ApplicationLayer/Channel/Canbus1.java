@@ -46,21 +46,28 @@ public class Canbus1 extends Channel {
      */
     public Canbus1(List<AppComponent> myComponentList, List<Service> myServices) {
         super(myComponentList, myServices);
+        this.dev = dev;
+        this.id = "Canbus1";
         // Check that a BMS AppComponent was supplied
         // With the exact amount of double[] values as the implementation here
-        //try{
-          //  this.bms = this.myComponentsMap.get("bms"); // Must match name in .xlsx file
-            //if(bms != null){
-              //  int len = bms.len;
-                //if(len != this.lenBMS){
-                  //  throw new Exception("Cantidad de valores de BMS en AppComponent != Cantidad de valores de lectura implementados");
-                //}
-            //}else{
-              //  throw new Exception("A BMS AppComponent was not supplied in Canbus1 channel");
-            //}
-        //}catch(Exception e){
-          //  e.printStackTrace();
-        //}
+        // try{
+        //     this.bms = this.myComponentsMap.get("bms"); // Must match name in .xlsx file
+        //     if(bms != null){
+        //         int len = bms.len;
+        //         if(len != this.lenBMS){
+        //             throw new Exception("Cantidad de valores de BMS en AppComponent != Cantidad de valores de lectura implementados");
+        //         }
+        //     }else{
+        //         throw new Exception("A BMS AppComponent was not supplied in Canbus1 channel");
+        //     }
+        // }catch(Exception e){
+        //     e.printStackTrace();
+        // }
+    }
+
+    @Override
+    public void readingLoop() {
+
     }
 
     /**
@@ -68,23 +75,27 @@ public class Canbus1 extends Channel {
      *  Al final de cada lectura se ejecuta informServices()
      */
     @Override
-    public void readingLoop() {
+    public void singleRead() {
+        long maxDelay = 1000;
         ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("bash", "-c", "candump can1");
+        processBuilder.command("candump", "vcan1", "-T", "900");
         try {
             Process process = processBuilder.start();
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(process.getInputStream())
             );
             String line;
+            long initialTime = System.currentTimeMillis();
             while(true){
-                try{
-                    while ((line = reader.readLine()) != null) {
-                        parseMessage(line);
-                        super.informServices(); // Call this just after all AppComponent in myComponentList were updated
-                    }
-                }catch (Exception exception){
-                    exception.printStackTrace();
+                if(System.currentTimeMillis() - initialTime >= maxDelay) {
+                    System.out.println("Time passed");
+                    process.destroy();
+                    break;
+                }
+                line = reader.readLine();
+                if(line != null) {
+                    System.out.println(line);
+                    parseMessage(line);
                 }
             }
         }catch (Exception e) {
@@ -101,12 +112,10 @@ public class Canbus1 extends Channel {
         //processBuilder.redirectErrorStream(true);
         // NOTA: primero hay que iniciar el can com en comando 'stty -F /dev/serial0 raw 9600 cs8 clocal -cstopb'
         // (9600 es el baud rate)
-        
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("sudo /sbin/ip link set can1 up type can bitrate 500000");
+    
         //stringBuilder.append("cd ./src/main/java/ApplicationLayer/SensorReading/CANReaders/linux-can-utils;");
         //stringBuilder.append("gcc candump.c lib.c -o candump;"); // Comment this on second execution, no need to recompile
-        processBuilder.command("bash", "-c", stringBuilder.toString());
+        processBuilder.command("sudo", "/sbin/ip", "link" , "set", "vcan1", "up", "type", "can", "bitrate", "500000");
         try {
             processBuilder.start();
         } catch (IOException e) {
@@ -134,19 +143,6 @@ public class Canbus1 extends Channel {
             return value - (1<<sbits); // calculate 2comp representation
         }
     }
-    public static void main(String[] args) {
-        System.out.println(changeToTwoComp(0,8)); //->0
-        System.out.println(changeToTwoComp(1,8)); //->1
-        System.out.println(changeToTwoComp(2,8)); //->2
-        System.out.println(changeToTwoComp(126,8)); //->126
-        System.out.println(changeToTwoComp(127,8)); //->127
-        System.out.println(changeToTwoComp(128,8)); //->-128
-        System.out.println(changeToTwoComp(129,8)); //->-127
-        System.out.println(changeToTwoComp(130,8)); //->-126
-        System.out.println(changeToTwoComp(254,8)); //->-2
-        System.out.println(changeToTwoComp(255,8)); //->-1
-    }
-
     /**
      * Función que recibe el mensaje del canbus y lo transforma y guarda en un arreglo de
      * strings, y que de acuerdo al id del mensaaje guarda directamente los respectivos valores en
