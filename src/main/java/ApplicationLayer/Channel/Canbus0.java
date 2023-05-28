@@ -9,6 +9,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
+/**
+ * Channel encargado de leer los datos entregados por el CANBUS de los inversores Kelly.
+ * Esta es una carácteristica opcional ofrecida al comprar los inversores, por lo que 
+ * la documentación sobre los mensajes es bastante dificil de encontrar.
+ * Está en el siguiente link <a target="_blank" 
+ * href="https://drive.google.com/file/d/1Fepr-ZYgVn0TuLsoN_UW5ZaNASNzT34t/view">
+ * https://drive.google.com/file/d/1Fepr-ZYgVn0TuLsoN_UW5ZaNASNzT34t/view</a>
+ */
+
 public class Canbus0 extends Channel {
     private int[] data = new int[8]; // Memory efficient buffer
 

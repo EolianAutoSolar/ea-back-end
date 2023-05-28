@@ -9,7 +9,10 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 /**
- Clase que representa el canal que guarda los datos en el bms.
+ * Channel encargado de leer los datos entregados por el CANBUS del BMS elithium lithiumate.
+ * El formato de los mensajes se describe en el siguiente link <a target="_blank" 
+ * href="https://lithiumate.elithion.com/php/controller_can_specs.php">
+ * https://lithiumate.elithion.com/php/controller_can_specs.php</a>
  */
 public class Canbus1 extends Channel {
     private int[] data = new int[8]; // Memory efficient buffer

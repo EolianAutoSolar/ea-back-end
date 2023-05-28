@@ -11,9 +11,7 @@ import java.util.List;
 
 
 /**
- * Se encarga de enviar la información de los componentes al servidor web para su visualización.
- * Para ello se basa en el sistema de eventos + JSONs de Websockets.
- * Debe haber un listener para cada AppComponent, con nombre ID del AppComponent.
+ * Envía a un websocket el estado actual de todos los {@link ApplicationLayer.AppComponents} presentes en la ejecución del programa.
  */
 public class WebSocketService extends Service{
     SocketIOServer server; // Actuamos como servidor, Cliente es la App en Vuejs

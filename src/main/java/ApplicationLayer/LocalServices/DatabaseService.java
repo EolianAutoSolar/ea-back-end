@@ -11,10 +11,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Se encarga de guardar la información de los componentes a la base de datos.
- * Debe haber una tabla para cada AppComponent en la base de datos.
- * Hace insert de los datos actuales con un timestamp.
+ * Guarda en archivos .csv, el estado actual de todos los {@link ApplicationLayer.AppComponents} presentes en la ejecución del programa.
+ * El formato en el que guarda los datos es el mismo en el cual se reciben los .csv para cada AppComponent, más una columna asociada al Timestamp del registro.
  */
+
 public class DatabaseService extends Service implements Runnable {
 
     public String absolute_path; // path to /data folder
