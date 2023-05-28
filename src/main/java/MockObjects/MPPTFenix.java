@@ -1,5 +1,9 @@
 package MockObjects;
 
+/**
+ * Simula la comunicación CAN del(los) MPPT.
+ */
+
 public class MPPTFenix {
 
     public double[][] mpptValues = new double[4][8]; // son 4 mppts, cada uno guarda 8 valores

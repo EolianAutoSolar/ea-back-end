@@ -9,9 +9,24 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Clase que toma los CSV desde un directorio y los transforma en lista de AppComponents dependiendo si son AppComponents
- * o AppReceivers. Los CSV deben seguir el formato correcto indicado en el README.md. La idea es que esta clase se use
- * desde los métodos de inicialización, para siempre inicilizar los AppComponents desde los últimos CSVs.
+ * Carga los .csv desde un directorio y los transforma en una lista de AppComponents.
+ * En los .csv se debe crear una columna por parámetro que se quiera manejar, cada columna
+ * debe tener al menos 3 filas:
+ * <ol>
+ *     <li>Nombre del parámetro (ej. "voltaje", "corriente")</li>
+ *     <li>Valor mínimo del parámetro con los decimales de presición que se quieren manejar (ej 0.1)</li>
+ *     <li>Valor mínimo del parámetro con los decimales de presición que se quieren manejar (ej 1.0)</li>
+ * </ol>
+ * Por ejemplo en la siguiente tabla se específica guardar el valor "voltaje" que va desde 0.1 hasta 1. Como se
+ * especifíca 1 decimal, este valor puede ser 0.1, 0.2, 0.3, ..., 1.0.
+ * <table border="3">
+ *  <tr><th>voltaje</th> <th>nombre parámetro 2</th> <th>...</th></tr>
+ *  <tr><td>0.1</td> <td>mínimo parámetro 2</td> <td>...</td></tr>
+ *  <tr><td>1</td> <td>máximo parámetro 2</td> <td>...</td></tr>
+ * </table>
+ *
+ * La idea es que esta clase se use desde los métodos de inicialización,
+ * para siempre inicializar los AppComponents desde los últimos .csv's.
  */
 public class CSVToAppComponent {
 

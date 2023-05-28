@@ -7,11 +7,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
 /**
- * Service repesenta los servicios locales que se corren en paralelo
+ * Un servicio representa una acción que procesa los datos almacenados en un {@link AppComponent}.
  * Por ejemplo: Visualización de datos o Almacenamiento de datos.
- * La API son los AppComponents que se ponen en cola de los servicios.
- * Luego los servicios consumen AppComponents sacando datos de ellos.
- * Además cada servicio es un thread independiente, e implementa run().
  */
 public abstract class Service implements Runnable{
     BlockingQueue<AppComponent> componentsToBeChecked; // Cola de AppComponents
@@ -63,8 +60,7 @@ public abstract class Service implements Runnable{
     }
 
     /**
-     * Todos los servicios deben hacer algo con cada AppComponent.
-     * Y por lo tanto deben implementar el método serve
+     * Procesa el AppComponent recibido.
      * @param c AppComponent a consumir
      */
     protected abstract void serve(AppComponent c);

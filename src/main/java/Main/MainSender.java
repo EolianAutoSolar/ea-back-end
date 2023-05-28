@@ -26,6 +26,10 @@ import java.util.List;
 
 import com.pi4j.system.SystemInfo;
 
+/**
+ * Programa que se ejecuta en la RPI.
+ */
+
 public class MainSender {
     public static String dir = "C:/Users/Dante/Desktop/Eolian/Eolian-Auriga-backend/src/main/java/ApplicationLayer/AppComponents/ExcelToAppComponent/Eolian_fenix";
     public XbeeReceiver xbeeReceiver;

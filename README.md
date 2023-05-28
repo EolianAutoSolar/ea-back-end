@@ -17,120 +17,29 @@ The telemetry system runs in a Raspberry Pi inside the car. On one hand, it uses
 
 # Dependencies and configuration
 
-Software required:
+Para correr la aplicación se necesita:
+* jdk 8u212 (o menor).
+* Apache Maven
 
-* IntelliJ https://www.jetbrains.com/idea/
-* Java JDK https://www.oracle.com/technetwork/java/javase/downloads/index.html
-* NodeJS https://nodejs.org/en/
+En un inicio el proyecto importaba sus dependencias del mismo repositorio. En un punto se añadió soporte para Apache Maven. Aunque de todas formas se dejaron las librerias utilizadas en ese entonces dentro de la carpeta `libs`.
 
-For Back-end:
+(TODO: Queda pendiente comprobar que ya no se necesitan las librerías y con el archivo `pom.xml` es suficiente para tener una aplicación autocontenida).
 
-* Import the directory *Protocol* into IntelliJ
-* Configure the project to work with Java 8
-* To import dependencies:
-  * Right click in Protocol.iml and select *import modules* OR
-  * Go to *File->Project Strucure->Modules* to add all the JAR files inside the *libs* directory. The JAR files inside *JUnit* must be imported for testing, not compiling
+(TODO: Documentar que hay que configurar el setting.xml del mvn para dejar la libreria de las xbee en la whitelist)
 
-For Middleware and Front-end:
+# Como correr la aplicación
 
-* Run `npm install` inside the *Server API* and *VueJS front end* directories to install all dependencies
-* Install Quasar CLI with `npm i -g @quasar/cli`
-* In Windows allow scripts to run. In Admin Power Shell run `Set-ExecutionPolicy RemoteSigned`
-* Run `npm run lint -- --fix` for lint operations
-
-# Run the applications
-
-Back end:
-
-* Run the *MainReceiver* and *MainSender* classes as requested
-
-Middleware:
-
-* With back-end running, run `node index.js` inside *Server API* to run the middleware between back-end and front-end
-
-Front end:
-
-* Run `npm run dev` inside *VueJS front end* to run the front-end
-
-# Notes
-
-The project is under development. Basic data dynamics are already implemented. Front-end must be completed. Compatibility with Eolian Fenix (older solar car) is in progress.
-
-#  Testing Support
-
-From 18/02/2021 this project has testing support (still in development).
-
-For this to work several setup things were done:
-
-1. Setting un maven support (a pom.xml file) to build and test the project.
-2. Added surefire plugin to the pom, to execute tests.
-3. Added junit5 (jupiter) dependency, to write tests.
-
-# CI
-
-CI is in development (the project migration to complete CI is a WIP), but at the future it will be done by executing
-`mvn --batch-mode --update-snapshots verify`.
-
---batch-mode = not interactive (don't ask for prompt values, use default instead)
-
---update-snapshots = check dependencies (if outdated, redownload them)
-
-verify = builds and tests the project
-
-## Pending
-
-Previously all dependencies where handled offline (directly having the source code on the repo). 
-
-However just the necessary libraries (necessary enough to build the project) where transferred to the pom file.
-Therefore there are many libraries that were not imported to the pom file, to keep that in mind if some error arises because of that.
-
-## Build
-
-To build the project run:
+Crear ejecutable:
 
 `mvn clean compile assembly:single`
 
-## Tests structure
+Ejecutar archivo generado:
 
-There are many tests intended for the following purposes:
+`java -jar OUT.jar --in <1> --out <2> --xbee <3>`
 
-### Common code
+1. Path (absoluto o relativo). Especifica desde donde cargar los archivos .csv de los componentes.
+2. Path (absoluto o relativo). Especifica donde guardar los datos leídos.
+3. Puerto donde esta conectada la xbee.
 
-All the base code of the repository.
 
-### Special implementations
-
-This will depend of your own architecture and the things that you want to test of your architecture.
-
-For example, in our project we tests things such as:
-* Check if the RPI i2c bus is available.
-* Check if the i2c channel is working properly.
-* Check if the wireless sender is sending the correct data.
-
-and so on...
-
-General list:
-
-* Check java version 1.8.0.212.
-* Check if all the devices are connected properly.
-
-  * Raspberry Pi 4B+.
-  * Arduino nano (MPPT). 
-  * Arduino nano (Kelly | BMS).
-  * Serial to can (MPPT). 
-  * Serial to can (Kelly | BMS).
-  * XBee.
-  * XBee antenna.
-  * GPS.
-  * GPS antenna.
-  * Gyroscope.
-  * LCD 11" screen.
-  * LCD 7" screen.
-
-* Check if all the interfaces are working.
-  * i2c. Between the RPI and both arduinos.
-  * canbus MPPT. Between the arduino nano and the serial to can (MPPT).
-  * canbus KELLY | BMS. Between the arduino nano and the serial to can (KELLY | BMS).
-
-* Check if all of the channels work properly.
-* Check if all of the services work properly.
+Actualmente el proyecto usa un plugin de Maven para empaquetarse, el cuál entrega un archivo `.jar` ejecutable. El archivo que se ejecuta al correr el archivo esta definido en el archivo `pom.xml` en el path `project.build.pluginManagement.plugins.plugin.configuration.archive.manifest.mainClass`.

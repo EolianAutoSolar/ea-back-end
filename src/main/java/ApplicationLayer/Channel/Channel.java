@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Lee las fuentes de datos del sistema y guarda lo leído en su {@link AppComponent} respectivo.
+ */
+
 public abstract class Channel implements Runnable {
     public HashMap<String, AppComponent> myComponentsMap; // To modify values with cost O(1) inside readingLoop()
     public List<AppComponent> myComponentList ; // List that Services will receive

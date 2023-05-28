@@ -7,25 +7,20 @@ package Main;
 
 import ApplicationLayer.AppComponents.AppComponent;
 import ApplicationLayer.AppComponents.ExcelToAppComponent.CSVToAppComponent;
-import ApplicationLayer.Channel.I2C;
 import ApplicationLayer.Channel.NullChannel;
-import ApplicationLayer.Channel.TestChannel;
-import ApplicationLayer.LocalServices.DatabaseService;
-import ApplicationLayer.LocalServices.PrintService;
 import ApplicationLayer.LocalServices.Service;
 import ApplicationLayer.LocalServices.WebSocketService;
 import ApplicationLayer.LocalServices.WirelessService.WirelessReceiver;
-import ApplicationLayer.LocalServices.WirelessService.WirelessSender;
 import ApplicationLayer.LocalServices.WirelessService.ZigBeeLayer.XbeeReceiver;
-import ApplicationLayer.LocalServices.WirelessService.ZigBeeLayer.XbeeSender;
-//import io.socket.engineio.client.transports.WebSocket;
-//import javafx.print.Printer;
+import com.pi4j.system.SystemInfo;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.pi4j.system.SystemInfo;
+/**
+ * Programa que se ejecuta en los computadores escolta.
+ */
 
 public class MainReceiver {
     public static String dir = "C:/Users/Dante/Downloads/PC-20220111T175102Z-001/PC/components/auriga";
