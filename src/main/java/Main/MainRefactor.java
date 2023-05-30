@@ -83,8 +83,8 @@ public class MainRefactor {
 
         List<Channel> channels = new ArrayList<>();
         // Channels
-        Canbus1 can1 = new Canbus1(components, services, dev);
-        Canbus0 can0 = new Canbus0(components, services, dev);
+        Canbus1 can1 = new Canbus1(components, services);
+        Canbus0 can0 = new Canbus0(components, services);
         TestChannel tc = new TestChannel(components, services);
         //channels.add(can1);
         //channels.add(can0);

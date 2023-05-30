@@ -43,3 +43,7 @@ Ejecutar archivo generado:
 
 
 Actualmente el proyecto usa un plugin de Maven para empaquetarse, el cuál entrega un archivo `.jar` ejecutable. El archivo que se ejecuta al correr el archivo esta definido en el archivo `pom.xml` en el path `project.build.pluginManagement.plugins.plugin.configuration.archive.manifest.mainClass`.
+
+# Generar javadocs
+
+Desde el directorio `src/main/java` ejecutar el comando `javadoc -d ../../../docs -subpackages *`. Se generará una carpeta `docs` en el directorio root del proyecto donde se puede ver la documentación como una página web al abrir el archivo `index.html`.
