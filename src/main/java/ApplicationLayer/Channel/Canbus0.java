@@ -23,16 +23,14 @@ public class Canbus0 extends Channel {
 
     private AppComponent kellyIzq;
     private AppComponent kellyDer;
-    private boolean dev = false;
     /**
      * Each channel has predefined AppComponents
      *
      * @param myComponentList List of AppComponent that this Channel update values to
      * @param myServices Services to inform to whenever an AppComponents get updated
      */
-    public Canbus0(List<AppComponent> myComponentList, List<Service> myServices, boolean dev) {
+    public Canbus0(List<AppComponent> myComponentList, List<Service> myServices) {
         super(myComponentList, myServices);
-        this.dev = dev;
         this.id = "Canbus0";
     
         for(AppComponent ac : myComponentList) {

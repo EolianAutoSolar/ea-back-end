@@ -49,7 +49,6 @@ public class Canbus1 extends Channel {
      */
     public Canbus1(List<AppComponent> myComponentList, List<Service> myServices) {
         super(myComponentList, myServices);
-        this.dev = dev;
         this.id = "Canbus1";
         // Check that a BMS AppComponent was supplied
         // With the exact amount of double[] values as the implementation here
