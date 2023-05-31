@@ -46,4 +46,5 @@ Actualmente el proyecto usa un plugin de Maven para empaquetarse, el cuál entre
 
 # Generar javadocs
 
-Desde el directorio `src/main/java` ejecutar el comando `javadoc -d ../../../docs -subpackages *`. Se generará una carpeta `docs` en el directorio root del proyecto donde se puede ver la documentación como una página web al abrir el archivo `index.html`.
+Se puede generar la documentación del repositorio con el comando `mvn javadoc:javadoc`.
+(TODO: Agregar configuración que muestre los tildes correctamente)
