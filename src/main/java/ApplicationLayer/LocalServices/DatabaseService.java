@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
-import io.github.cdimascio.dotenv.Dotenv;
 
 /**
  * Guarda en tablas de postgresql, el estado actual de todos los {@link ApplicationLayer.AppComponents} presentes en la ejecución del programa.
@@ -20,21 +19,20 @@ import io.github.cdimascio.dotenv.Dotenv;
 public class DatabaseService extends Service implements Runnable {
 
     public String[] components;
-    private Connection conn;//Crea una coneccion que usara todo el tiempo
+    private Connection conn;//Crea una conexion que usara todo el tiempo
 
-    public DatabaseService(List<AppComponent> lac) {
+    public DatabaseService(List<AppComponent> lac, String port) {
         super(lac);
         this.id = "Database";
 
-        Dotenv env = Dotenv.configure().directory("/home/pi/").load();//Abre el .env para extraer datos
-        //Setea todos los datos para la coneccion
-        String connectUrl = "jdbc:postgresql:" + env.get("DB_NAME");
+        //Setea todos los datos para la conexion
+        String connectUrl = "jdbc:postgresql://localhost:" + port + "/" + System.getenv("DB_NAME");
         Properties props = new Properties();
-        props.setProperty("user", env.get("DB_USER"));
-        props.setProperty("password", env.get("DB_PASSWORD"));
+        props.setProperty("user", System.getenv("DB_USER"));
+        props.setProperty("password", System.getenv("DB_PASSWORD"));
 
         try {
-            this.conn = DriverManager.getConnection(connectUrl, props);//Abre la coneccion
+            this.conn = DriverManager.getConnection(connectUrl, props);//Abre la conexion
         } catch(SQLException e) {
             e.printStackTrace();
         }
@@ -96,7 +94,7 @@ public class DatabaseService extends Service implements Runnable {
      */
     public void close() {
         try {
-            //Se cierra la coneccion
+            //Se cierra la conexion
             this.conn.close();
         } catch(SQLException e) {
             e.printStackTrace();

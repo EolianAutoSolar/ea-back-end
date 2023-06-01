@@ -28,8 +28,7 @@ public class MainRefactor {
         String xbeePort = "/dev/ttyUSB0";
         // String componentsPath = "/home/pi/Desktop/components/auriga/";
         String componentsPath = "/home/jayki/Desktop/eolian/components/";
-        // String databasePath = "/home/pi/Desktop/";
-        String databasePath = "/home/jayki/Desktop/eolian/data/";
+        String databasePort = "5432";
         for(int i = 0; i < args.length; i++) {
             try {
                 if(args[i].equals("--dev")) {
@@ -38,8 +37,8 @@ public class MainRefactor {
                 else if(args[i].equals("--xbee")) {
                     xbeePort = args[i+1];
                 }
-                else if(args[i].equals("--out")) {
-                    databasePath = args[i+1];
+                else if(args[i].equals("--database")) {
+                    databasePort = args[i+1];
                 }
                 else if(args[i].equals("--in")) {
                     componentsPath = args[i+1];
@@ -51,7 +50,7 @@ public class MainRefactor {
             catch (ArrayIndexOutOfBoundsException e) {
                 System.out.println("Usage: java -jar Main.jar [OPTIONS]");
                 System.out.println("Options: --xbee <port>");
-                System.out.println("         --out <path>");
+                System.out.println("         --database <port>");
                 System.out.println("         --in <path>");
                 System.out.println("         --dev");
                 System.out.println("         --encrypt");
@@ -74,7 +73,7 @@ public class MainRefactor {
         //WirelessSender ws = new WirelessSender(components, xbeePort, encrypt);
         //PrintService ps = new PrintService("TX: ");
         WebSocketService wss = new WebSocketService(components);
-        //DatabaseService dbs = new DatabaseService(components, databasePath);
+        //DatabaseService dbs = new DatabaseService(components, databasePort);
 
         //services.add(ws);
         //ls.add(ps);
