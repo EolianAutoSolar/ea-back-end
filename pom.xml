@@ -81,6 +81,12 @@
             <version>${kotlin.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.27.jre6</version>
+        </dependency>
+
     </dependencies>
 
     <build>

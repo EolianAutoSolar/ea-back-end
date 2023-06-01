@@ -57,7 +57,6 @@ public class MainSender {
         boolean encrypt = false;
         String xbeePort = "/dev/ttyUSB0";
         String componentsPath = "/home/pi/Desktop/components/auriga/";
-        String databasePath = "/home/pi/Desktop/";
         for(int i = 0; i < args.length; i++) {
             try {
                 if(args[i].equals("--dev")) {
@@ -65,9 +64,6 @@ public class MainSender {
                 }
                 else if(args[i].equals("--xbee")) {
                     xbeePort = args[i+1];
-                }
-                else if(args[i].equals("--out")) {
-                    databasePath = args[i+1];
                 }
                 else if(args[i].equals("--in")) {
                     componentsPath = args[i+1];
@@ -79,7 +75,6 @@ public class MainSender {
             catch (ArrayIndexOutOfBoundsException e) {
                 System.out.println("Usage: java -jar Main.jar [OPTIONS]");
                 System.out.println("Options: --xbee <port>");
-                System.out.println("         --out <path>");
                 System.out.println("         --in <path>");
                 System.out.println("         --dev");
                 System.out.println("         --encrypt");
@@ -102,7 +97,7 @@ public class MainSender {
         WirelessSender ws = new WirelessSender(lac, xbeePort, encrypt);
         //PrintService ps = new PrintService("TX: ");
         WebSocketService wss = new WebSocketService();
-        DatabaseService dbs = new DatabaseService(lac, databasePath);
+        DatabaseService dbs = new DatabaseService(lac);
 
         ls.add(ws);
         //ls.add(ps);
