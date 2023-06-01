@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import io.github.cdimascio.dotenv.Dotenv;
 
 /**
  * Guarda en tablas de postgresql, el estado actual de todos los {@link ApplicationLayer.AppComponents} presentes en la ejecución del programa.
@@ -19,19 +20,21 @@ import java.sql.PreparedStatement;
 public class DatabaseService extends Service implements Runnable {
 
     public String[] components;
-    private Connection conn;
+    private Connection conn;//Crea una coneccion que usara todo el tiempo
 
     public DatabaseService(List<AppComponent> lac) {
         super(lac);
         this.id = "Database";
 
-        String connectUrl = "jdbc:postgresql:eolianAuriga";
+        Dotenv env = Dotenv.configure().directory("/home/pi/").load();//Abre el .env para extraer datos
+        //Setea todos los datos para la coneccion
+        String connectUrl = "jdbc:postgresql:" + env.get("DB_NAME");
         Properties props = new Properties();
-        props.setProperty("user", "backEndTelemetry");
-        props.setProperty("password", "");
+        props.setProperty("user", env.get("DB_USER"));
+        props.setProperty("password", env.get("DB_PASSWORD"));
 
         try {
-            this.conn = DriverManager.getConnection(connectUrl, props);
+            this.conn = DriverManager.getConnection(connectUrl, props);//Abre la coneccion
         } catch(SQLException e) {
             e.printStackTrace();
         }
@@ -66,15 +69,21 @@ public class DatabaseService extends Service implements Runnable {
     public void writeValues(double[] values, String ID) {
 
         try {
+            //Crea la query que se usara, los ? representan valores seteables
             String query = "INSERT INTO " + ID + " VALUES (DEFAULT";
             for(int i = 0; i < values.length; i++) {
                 query += ",?";
             }
             query += ");";
+
+            //Se abre el statement con la query
             PreparedStatement stat = this.conn.prepareStatement(query);
+            //Se ingresan los elementos
             for(int i = 0; i < values.length; i++) {
                 stat.setDouble(i+1, values[i]);
             }
+
+            //Se ejecuta la query y se cierra el statement
             stat.executeUpdate();
             stat.close();
         } catch(SQLException e) {
@@ -87,6 +96,7 @@ public class DatabaseService extends Service implements Runnable {
      */
     public void close() {
         try {
+            //Se cierra la coneccion
             this.conn.close();
         } catch(SQLException e) {
             e.printStackTrace();
