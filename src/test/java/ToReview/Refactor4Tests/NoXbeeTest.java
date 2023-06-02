@@ -1,16 +1,16 @@
 package ToReview.Refactor4Tests;
 //package Test.Refactor4Tests;
 //
-//import ApplicationLayer.AppComponents.AppComponent;
-//import ApplicationLayer.AppComponents.AppReceiver;
-//import ApplicationLayer.AppComponents.AppSender;
-//import ApplicationLayer.LocalServices.WirelessService.WirelessReceiver;
-//import ApplicationLayer.LocalServices.WirelessService.WirelessSender;
-//import ApplicationLayer.LocalServices.WirelessService.ZigBeeLayer.XbeeReceiver;
-//import ApplicationLayer.SensorReading.DelayControl;
-//import ApplicationLayer.SensorReading.RandomReaders.RandomReader;
-//import ApplicationLayer.SensorReading.SensorsReader;
-//import ApplicationLayer.AppComponents.ExcelToAppComponent.CSVToAppComponent;
+//import AppComponents.AppComponent;
+//import AppComponents.AppReceiver;
+//import AppComponents.AppSender;
+//import LocalServices.WirelessService.WirelessReceiver;
+//import LocalServices.WirelessService.WirelessSender;
+//import LocalServices.WirelessService.ZigBeeLayer.XbeeReceiver;
+//import SensorReading.DelayControl;
+//import SensorReading.RandomReaders.RandomReader;
+//import SensorReading.SensorsReader;
+//import AppComponents.ExcelToAppComponent.CSVToAppComponent;
 //
 //import java.util.LinkedList;
 //import java.util.List;

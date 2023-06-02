@@ -1,23 +1,23 @@
 package ToReview.RefactorTests;
 //package Test.RefactorTests;
 //
-//import ApplicationLayer.AppComponents.AppComponent;
-//import ApplicationLayer.AppComponents.AppReceiver;
-//import ApplicationLayer.AppComponents.AppSender;
-//import ApplicationLayer.LocalServices.PrintService;
-//import ApplicationLayer.LocalServices.WebSocketService;
-//import ApplicationLayer.SensorReading.RandomReaders.RandomReader;
-//import ApplicationLayer.AppComponents.ExcelToAppComponent.CSVToAppComponent;
-//import ApplicationLayer.LocalServices.WirelessService.PresentationLayer.Encryption.CryptoAdmin;
-//import ApplicationLayer.LocalServices.WirelessService.PresentationLayer.Encryption.KeyAdmin;
-//import ApplicationLayer.LocalServices.WirelessService.PresentationLayer.Packages.State;
-//import ApplicationLayer.LocalServices.WirelessService.PresentationLayer.Packages.Initializer.ReceiverInitializer;
-//import ApplicationLayer.LocalServices.WirelessService.PresentationLayer.Packages.Initializer.SenderInitializer;
-//import ApplicationLayer.LocalServices.WirelessService.PresentationLayer.Packages.Message;
-//import ApplicationLayer.LocalServices.WirelessService.ZigBeeLayer.Receiving.ReceiverAdmin;
-//import ApplicationLayer.LocalServices.WirelessService.ZigBeeLayer.XbeeReceiver;
-//import ApplicationLayer.LocalServices.WirelessService.ZigBeeLayer.Sending.SenderAdmin;
-//import ApplicationLayer.LocalServices.WirelessService.ZigBeeLayer.XbeeSender;
+//import AppComponents.AppComponent;
+//import AppComponents.AppReceiver;
+//import AppComponents.AppSender;
+//import LocalServices.PrintService;
+//import LocalServices.WebSocketService;
+//import SensorReading.RandomReaders.RandomReader;
+//import AppComponents.ExcelToAppComponent.CSVToAppComponent;
+//import LocalServices.WirelessService.PresentationLayer.Encryption.CryptoAdmin;
+//import LocalServices.WirelessService.PresentationLayer.Encryption.KeyAdmin;
+//import LocalServices.WirelessService.PresentationLayer.Packages.State;
+//import LocalServices.WirelessService.PresentationLayer.Packages.Initializer.ReceiverInitializer;
+//import LocalServices.WirelessService.PresentationLayer.Packages.Initializer.SenderInitializer;
+//import LocalServices.WirelessService.PresentationLayer.Packages.Message;
+//import LocalServices.WirelessService.ZigBeeLayer.Receiving.ReceiverAdmin;
+//import LocalServices.WirelessService.ZigBeeLayer.XbeeReceiver;
+//import LocalServices.WirelessService.ZigBeeLayer.Sending.SenderAdmin;
+//import LocalServices.WirelessService.ZigBeeLayer.XbeeSender;
 //import com.digi.xbee.api.XBeeDevice;
 //import org.junit.jupiter.api.Test;
 //
@@ -85,7 +85,7 @@ package ToReview.RefactorTests;
 //        XbeeSender xbeeSender = new XbeeSender(XBEE_BAUD, XBEE_PORT, (int) MSG_RAW_SIZE_BYTES);
 //        SenderAdmin senderAdmin = new SenderAdmin(xbeeSender, cryptoAdmin);
 //
-//        String dir = "src/ApplicationLayer.AppComponents.ExcelToAppComponent/Eolian_fenix";
+//        String dir = "src/AppComponents.ExcelToAppComponent/Eolian_fenix";
 //        List<AppSender> appSenders = CSVToAppComponent.CSVs_to_AppSenders(dir);
 //
 //        // Lista de estados de capa inferior para incializar mensajes-state
@@ -185,7 +185,7 @@ package ToReview.RefactorTests;
 //        XbeeReceiver xbeeReceiver = new XbeeReceiver(XBEE_BAUD, XBEE_PORT);
 //
 //
-//        String dir = "src/ApplicationLayer.AppComponents.ExcelToAppComponent/Eolian_fenix";
+//        String dir = "src/AppComponents.ExcelToAppComponent/Eolian_fenix";
 //        List<AppReceiver> appReceivers = CSVToAppComponent.CSVs_to_AppReceivers(dir);
 //
 //        // Lista de estados de capa inferior para incializar mensajes-state

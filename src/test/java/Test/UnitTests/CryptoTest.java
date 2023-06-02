@@ -1,8 +1,9 @@
 package Test.UnitTests;
 
-import ApplicationLayer.LocalServices.WirelessService.PresentationLayer.Encryption.CryptoAdmin;
-import ApplicationLayer.LocalServices.WirelessService.PresentationLayer.Encryption.KeyAdmin;
 import org.junit.jupiter.api.condition.EnabledIf;
+
+import services.WirelessService.PresentationLayer.Encryption.CryptoAdmin;
+import services.WirelessService.PresentationLayer.Encryption.KeyAdmin;
 
 import static org.junit.jupiter.api.Assertions.*;
 

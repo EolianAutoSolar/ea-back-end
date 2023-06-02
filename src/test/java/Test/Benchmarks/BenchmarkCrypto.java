@@ -1,9 +1,9 @@
 package Test.Benchmarks;
 
-import ApplicationLayer.LocalServices.WirelessService.PresentationLayer.Encryption.CryptoAdmin;
-import ApplicationLayer.LocalServices.WirelessService.PresentationLayer.Encryption.KeyAdmin;
-
 import org.openjdk.jmh.annotations.*;
+
+import services.WirelessService.PresentationLayer.Encryption.CryptoAdmin;
+import services.WirelessService.PresentationLayer.Encryption.KeyAdmin;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeUnit;

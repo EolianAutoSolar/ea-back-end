@@ -11,12 +11,13 @@ import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
 
+import datacontainers.DataContainer;
+import datacontainers.ExcelToAppComponent.CSVToAppComponent;
+
 import org.junit.jupiter.api.Test;
 
-import ApplicationLayer.AppComponents.AppComponent;
-import ApplicationLayer.AppComponents.ExcelToAppComponent.CSVToAppComponent;
-import ApplicationLayer.Channel.I2C;
-import MockObjects.BMSFenix;
+import gatherers.I2C;
+import mocks.BMSFenix;
 
 public class InnitTest {
     
@@ -41,7 +42,7 @@ public class InnitTest {
     @Test
     public void checkFunctionality() throws Exception {
         // preocuparse de que funciona para 3 iteraciones minimo
-        List<AppComponent> lac = CSVToAppComponent.CSVs_to_AppComponents("components/Eolian_fenix");
+        List<DataContainer> lac = CSVToAppComponent.CSVs_to_AppComponents("components/Eolian_fenix");
         
         BMSFenix bms = new BMSFenix();
         byte offset = 0;

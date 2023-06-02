@@ -1,9 +1,11 @@
 package Test.Benchmarks;
-import ApplicationLayer.LocalServices.WirelessService.Utilities.BitOperations;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
+
+import services.WirelessService.Utilities.BitOperations;
+
 import java.util.concurrent.TimeUnit;
 
 public class BenchmarkBitOperation {

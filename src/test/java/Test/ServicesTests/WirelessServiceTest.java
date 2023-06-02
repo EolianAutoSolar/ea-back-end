@@ -1,16 +1,16 @@
 package Test.ServicesTests;
 
-import ApplicationLayer.AppComponents.AppComponent;
-import ApplicationLayer.AppComponents.ExcelToAppComponent.CSVToAppComponent;
-import ApplicationLayer.Channel.TestChannel;
-import ApplicationLayer.LocalServices.PrintService;
-import ApplicationLayer.LocalServices.Service;
-import ApplicationLayer.LocalServices.WirelessService.PresentationLayer.Packages.State;
-import Test.ChannelsExec.TestChannelTest;
-import ApplicationLayer.LocalServices.WirelessService.WirelessReceiver;
-import ApplicationLayer.LocalServices.WirelessService.WirelessSender;
+import gatherers.TestChannel;
+import services.PrintService;
+import services.Service;
+import services.WirelessService.WirelessReceiver;
+import services.WirelessService.WirelessSender;
+import services.WirelessService.PresentationLayer.Packages.State;
 
 import org.junit.jupiter.api.Assertions;
+
+import datacontainers.DataContainer;
+import datacontainers.ExcelToAppComponent.CSVToAppComponent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,8 +25,8 @@ public class WirelessServiceTest {
     @org.junit.jupiter.api.Test
     void correctnessTest() throws Exception{
         String dir = "src/main/java/ApplicationLayer/AppComponents/ExcelToAppComponent/Example";
-        List<AppComponent> appComponentsSND = CSVToAppComponent.CSVs_to_AppComponents(dir);
-        List<AppComponent> appComponentsRCV = CSVToAppComponent.CSVs_to_AppComponents(dir);
+        List<DataContainer> appComponentsSND = CSVToAppComponent.CSVs_to_AppComponents(dir);
+        List<DataContainer> appComponentsRCV = CSVToAppComponent.CSVs_to_AppComponents(dir);
 
         // WirelessReceiver
         List<Service> otherServices = new ArrayList<>();
@@ -44,23 +44,23 @@ public class WirelessServiceTest {
 
         // 0. Create random values in range for all Components and save those values
         //testChannel.randomValuesInRangeForAllComponents(); // TODO: REDO THIS TEST TO GEN VALUES IN RANGE
-        List<AppComponent> appComponents_SND = testChannel.myComponentList; // Source
+        List<DataContainer> appComponents_SND = testChannel.myComponentList; // Source
 
         // 1. Send over protocol, put bytes inn XbeeReceiver Queue
-        for(AppComponent a : testChannel.myComponentList){
+        for(DataContainer a : testChannel.myComponentList){
             wirelessSender.serve(a);
         }
 
         // 2. Poll from XbeeReceiver Queue and parse
         wirelessReceiver.processMsg();
-        List<AppComponent> appComponents_RCV = wirelessReceiver.appCompUpdated; // Target
+        List<DataContainer> appComponents_RCV = wirelessReceiver.appCompUpdated; // Target
 
 
         // 3. Check values from appComponentsSND and appComponentsRCV, with bitSig tolerance
         // 3.1 Estimate what values should be in appComponentRCV
         HashMap<String, double[]> targetValuesMap = new HashMap<>();
 
-        for (AppComponent c: appComponents_SND ) {
+        for (DataContainer c: appComponents_SND ) {
             // Do a compression - decompression of valoresRealesActuales[] (just a mapping to int[])
             State actState = wirelessSender.states.get(c.getID());
             // Compress
@@ -77,7 +77,7 @@ public class WirelessServiceTest {
             targetValuesMap.put(c.ID, targetVals);
         }
         // 3.2 Check value per value, if the values match
-        for(AppComponent c: appComponents_RCV){
+        for(DataContainer c: appComponents_RCV){
             double[] target = targetValuesMap.get(c.ID);
             Assertions.assertArrayEquals(target, c.valoresRealesActuales);
         }
@@ -87,8 +87,8 @@ public class WirelessServiceTest {
 
     void useCaseTest() throws Exception {
         String dir = "src/main/java/ApplicationLayer/AppComponents/ExcelToAppComponent/Example";
-        List<AppComponent> appComponentsSND = CSVToAppComponent.CSVs_to_AppComponents(dir);
-        List<AppComponent> appComponentsRCV = CSVToAppComponent.CSVs_to_AppComponents(dir);
+        List<DataContainer> appComponentsSND = CSVToAppComponent.CSVs_to_AppComponents(dir);
+        List<DataContainer> appComponentsRCV = CSVToAppComponent.CSVs_to_AppComponents(dir);
 
         // WirelessReceiver + Printer
         List<Service> otherServices = new ArrayList<>();

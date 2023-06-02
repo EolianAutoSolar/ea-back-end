@@ -6,6 +6,9 @@ QuasarFrontEnd/node_modules
 Eolian-Telemetria-Auriga.iml
 src/main/java/ApplicationLayer/AppComponents/ExcelToAppComponent/venv
 docs
+eolian-auriga-backend.properties
+eolian-auriga-backend.xml
+module_eolian-auriga-backend.xml
 
 # CI
 target/

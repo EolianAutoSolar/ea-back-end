@@ -1,10 +1,12 @@
 package ApplicationLayer.ChannelTests;
 
-import ApplicationLayer.AppComponents.AppComponent;
-import ApplicationLayer.Channel.GPSChannel;
-import MockObjects.GPS;
+import gatherers.GPS;
+import mocks.MockGPS;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import datacontainers.DataContainer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -13,20 +15,20 @@ import java.util.ArrayList;
 
 public class GPSChannelTest {
 
-    private AppComponent appSender;
-    private GPS gps;
-    private GPSChannel gpsReader;
+    private DataContainer appSender;
+    private MockGPS gps;
+    private GPS gpsReader;
 
     @BeforeEach
     public void setUp() {
-        gps = new GPS();
-        appSender = new AppComponent("GPS",
+        gps = new MockGPS();
+        appSender = new DataContainer("GPS",
                 new double[] {0, 0, -1, 0, 0, -1}, // mins
                 new double[] {60, 90, 1, 60, 180, 1}, //maxs
                 new String[] {"latitude", "latitude_degree", "latitude_orientation", "longitude", "longitude_degree", "longitude_orientation"});
-        ArrayList<AppComponent> lac = new ArrayList<>();
+        ArrayList<DataContainer> lac = new ArrayList<>();
         lac.add(appSender);
-        gpsReader = new GPSChannel(lac, new ArrayList<>());
+        gpsReader = new GPS(lac, new ArrayList<>());
     }
 
     @Test

@@ -15,15 +15,18 @@ Our aim as a team is to share this software as an academic material, and contrib
 # Eolian Auriga Telemetry System
 The telemetry system runs in a Raspberry Pi inside the car. On one hand, it uses a Java Application to receive data from the car and other logistics tasks. On the other hand, it runs a VueJS application to visualize data and interact with the users. The system uses a middleware written in JS to communicate back-end and front-end.
 
-# Dependencies and configuration
+# Dependencias y configuración
 
 Para correr la aplicación se necesita:
 * jdk 8u212 (o menor).
 * Apache Maven
 
+Desde la versión de Maven 3.8 no se permite cargar dependencias en repositorios http por razones de seguridad. Lamentablemente la librería necesaria para usar las xbee esta en un repositorio http. Para poder usarla hay que darle permisos a esta librería en particular
+
 En un inicio el proyecto importaba sus dependencias del mismo repositorio. En un punto se añadió soporte para Apache Maven. Aunque de todas formas se dejaron las librerias utilizadas en ese entonces dentro de la carpeta `libs`.
 
 (TODO: Queda pendiente comprobar que ya no se necesitan las librerías y con el archivo `pom.xml` es suficiente para tener una aplicación autocontenida).
+
 
 (TODO: Documentar que hay que configurar el setting.xml del mvn para dejar la libreria de las xbee en la whitelist)
 
@@ -31,7 +34,7 @@ En un inicio el proyecto importaba sus dependencias del mismo repositorio. En un
 
 Crear ejecutable:
 
-`mvn clean compile assembly:single`
+`mvn compile assembly:single` | `mvn clean compile assembly:single`
 
 Ejecutar archivo generado:
 

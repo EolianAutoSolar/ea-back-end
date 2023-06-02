@@ -1,16 +1,16 @@
 package ToReview.Refactor3Tests;
 //package Test.Refactor3Tests;
-//import ApplicationLayer.AppComponents.AppComponent;
-//import ApplicationLayer.AppComponents.AppReceiver;
-//import ApplicationLayer.AppComponents.AppSender;
-//import ApplicationLayer.LocalServices.PrintService;
-//import ApplicationLayer.LocalServices.WirelessService.WirelessReceiver;
-//import ApplicationLayer.LocalServices.WirelessService.WirelessSender;
-//import ApplicationLayer.LocalServices.WirelessService.ZigBeeLayer.XbeeReceiver;
-//import ApplicationLayer.SensorReading.RandomReaders.RandomReader;
-//import ApplicationLayer.SensorReading.SensorsReader;
-//import ApplicationLayer.SensorReading.SequentialReaderExecutor;
-//import ApplicationLayer.AppComponents.ExcelToAppComponent.CSVToAppComponent;
+//import AppComponents.AppComponent;
+//import AppComponents.AppReceiver;
+//import AppComponents.AppSender;
+//import LocalServices.PrintService;
+//import LocalServices.WirelessService.WirelessReceiver;
+//import LocalServices.WirelessService.WirelessSender;
+//import LocalServices.WirelessService.ZigBeeLayer.XbeeReceiver;
+//import SensorReading.RandomReaders.RandomReader;
+//import SensorReading.SensorsReader;
+//import SensorReading.SequentialReaderExecutor;
+//import AppComponents.ExcelToAppComponent.CSVToAppComponent;
 //
 //import java.util.LinkedList;
 //import java.util.List;
@@ -22,7 +22,7 @@ package ToReview.Refactor3Tests;
 //    XbeeReceiver xbeeReceiver;
 //
 //    void receiverSetup() throws Exception {
-//        String dir = "src/ApplicationLayer.AppComponents.ExcelToAppComponent/Eolian_fenix";
+//        String dir = "src/AppComponents.ExcelToAppComponent/Eolian_fenix";
 //        List<AppReceiver> appReceivers = CSVToAppComponent.CSVs_to_AppReceivers(dir);
 //
 //        // High Level Services
@@ -50,7 +50,7 @@ package ToReview.Refactor3Tests;
 //     * @throws Exception
 //     */
 //    void senderSetup() throws Exception {
-//        String dir = "src/ApplicationLayer.AppComponents.ExcelToAppComponent/Eolian_fenix";
+//        String dir = "src/AppComponents.ExcelToAppComponent/Eolian_fenix";
 //        List<AppSender> appSenders = CSVToAppComponent.CSVs_to_AppSenders(dir);
 //        LinkedList<RandomReader> randomReaders = new LinkedList<>();
 //
