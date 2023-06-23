@@ -7,7 +7,7 @@ import com.pi4j.system.SystemInfo;
 
 import datacontainers.DataContainer;
 import datacontainers.ExcelToAppComponent.CSVToAppComponent;
-import gatherers.ChannelRunner;
+import gatherers.GathererRunner;
 import gatherers.Gatherer;
 import gatherers.Kelly;
 import gatherers.Lithiumate;
@@ -73,13 +73,13 @@ public class Sender {
 
         List<Gatherer> channels = new ArrayList<>();
         // Channels
-        Lithiumate can1 = new Lithiumate(components, services);
-        Kelly can0 = new Kelly(components, services);
+        Lithiumate can1 = new Lithiumate(components);
+        Kelly can0 = new Kelly(components);
 
         channels.add(can1);
         channels.add(can0);
 
-        ChannelRunner cr = new ChannelRunner(channels, 1000);
+        GathererRunner cr = new GathererRunner(channels, 1000);
         Thread channelsThread = new Thread(cr);
         channelsThread.start();
         

@@ -9,7 +9,7 @@ import java.util.List;
 import datacontainers.DataContainer;
 
 /**
- * Carga los .csv desde un directorio y los transforma en una lista de AppComponents.
+ * Carga los .csv desde un directorio y los transforma en una lista de DataContainers.
  * En los .csv se debe crear una columna por parámetro que se quiera manejar, cada columna
  * debe tener al menos 3 filas:
  * <ol>

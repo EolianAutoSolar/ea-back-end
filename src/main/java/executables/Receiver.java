@@ -7,7 +7,7 @@ import com.pi4j.system.SystemInfo;
 
 import datacontainers.DataContainer;
 import datacontainers.ExcelToAppComponent.CSVToAppComponent;
-import gatherers.ChannelRunner;
+import gatherers.GathererRunner;
 import gatherers.Gatherer;
 import gatherers.NullChannel;
 import services.Service;
@@ -72,12 +72,12 @@ public class Receiver {
 
         List<Gatherer> channels = new ArrayList<>();
         // Channels
-        NullChannel nc = new NullChannel(components, services);
+        NullChannel nc = new NullChannel(components);
         //channels.add(can1);
         //channels.add(can0);
         channels.add(nc);
 
-        ChannelRunner cr = new ChannelRunner(channels, 1000);
+        GathererRunner cr = new GathererRunner(channels, 1000);
         Thread channelsThread = new Thread(cr);
         channelsThread.start();
         

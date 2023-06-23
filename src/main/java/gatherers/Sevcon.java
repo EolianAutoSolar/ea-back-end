@@ -9,7 +9,7 @@ import java.util.List;
 
 import datacontainers.DataContainer;
 
-public class Canbus0_real extends Gatherer {
+public class Sevcon extends Gatherer {
     private int[] data = new int[8]; // Memory efficient buffer
 
     private DataContainer sevcon;
@@ -26,65 +26,15 @@ public class Canbus0_real extends Gatherer {
     private final int message_402_index = 26; // 4
     private final int message_502_index = 30; // 2 data
 
-    private boolean dev;
-
     /**
      * Each channel has predefined AppComponents
      *
      * @param myComponentList List of AppComponent that this Channel update values to
      * @param myServices Services to inform to whenever an AppComponents get updated
      */
-    public Canbus0_real(List<DataContainer> myComponentList, List<Service> myServices, boolean dev) {
-        super(myComponentList, myServices);
-        this.dev = dev;
-        // Check that a BMS AppComponent was supplied
-        // With the exact amount of double[] values as the implementation here
-        try{
-            this.sevcon = this.myComponentsMap.get("sevcon"); // Must match name in .xlsx file
-            if(sevcon != null){
-                int len = sevcon.len;
-                if(len != this.lenSEVCON){
-                    throw new Exception("Cantidad de valores de SEVCON en AppComponent != Cantidad de valores de lectura implementados");
-                }
-            }else{
-                throw new Exception("A Sevcon AppComponent was not supplied in Canbus0 channel");
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
-
-
-    /**
-     * Main reading and parsing loop
-     */
-    @Override
-    public void readingLoop() {
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        if(dev) {
-            processBuilder.command("bash", "-c", "candump vcan0");
-        }
-        else {
-            processBuilder.command("bash", "-c", "candump can0");
-        }
-        try {
-            Process process = processBuilder.start();
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(process.getInputStream())
-            );
-            String line;
-            while(true){
-                try{
-                    while ((line = reader.readLine()) != null) {
-                        parseMessage(line);
-                        super.informServices(); // Call this just after all AppComponent in myComponentList were updated
-                    }
-                }catch (Exception exception){
-                    exception.printStackTrace();
-                }
-            }
-        }catch (Exception e) {
-            e.printStackTrace();
+    public Sevcon(List<DataContainer> myComponentList) {
+        for(DataContainer dc : myComponentList) {
+            if(dc.getID() == "sevcon") this.sevcon = dc;
         }
     }
 
@@ -110,28 +60,14 @@ public class Canbus0_real extends Gatherer {
     public void setUp() {
         ProcessBuilder processBuilder = new ProcessBuilder();
         //processBuilder.redirectErrorStream(true);
-        // NOTA: primero hay que iniciar el can com en comando 'stty -F /dev/serial0 raw 9600 cs8 clocal -cstopb'
-        // (9600 es el baud rate)
         
         StringBuilder stringBuilder = new StringBuilder();
-        if(dev) {
-            stringBuilder.append("sudo /sbin/ip link add dev vcan0 type vcan;sudo /sbin/ip link set vcan0 up");
-        }
-        else {
-            stringBuilder.append("sudo /sbin/ip link set can0 up type can bitrate 1000000");
-        }
-        //stringBuilder.append("cd ./src/main/java/ApplicationLayer/SensorReading/CANReaders/linux-can-utils;");
-        //stringBuilder.append("gcc candump.c lib.c -o candump;"); // Comment this on second execution, no need to recompile
+        stringBuilder.append("sudo /sbin/ip link set can0 up type can bitrate 1000000");
         processBuilder.command("bash", "-c", stringBuilder.toString());
         try {
             processBuilder.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
             Thread.sleep(1000);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

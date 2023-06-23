@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import javax.xml.crypto.Data;
+
 import datacontainers.DataContainer;
 
 /**
@@ -48,29 +50,11 @@ public class Lithiumate extends Gatherer {
      * @param myComponentList Lista de componentes a los que este canal actualiza los valores.
      * @param myServices Servicios a informar cada vez que se actualiza un componente.
      */
-    public Lithiumate(List<DataContainer> myComponentList, List<Service> myServices) {
-        super(myComponentList, myServices);
+    public Lithiumate(List<DataContainer> myComponentList) {
         this.id = "Canbus1";
-        // Check that a BMS AppComponent was supplied
-        // With the exact amount of double[] values as the implementation here
-        // try{
-        //     this.bms = this.myComponentsMap.get("bms"); // Must match name in .xlsx file
-        //     if(bms != null){
-        //         int len = bms.len;
-        //         if(len != this.lenBMS){
-        //             throw new Exception("Cantidad de valores de BMS en AppComponent != Cantidad de valores de lectura implementados");
-        //         }
-        //     }else{
-        //         throw new Exception("A BMS AppComponent was not supplied in Canbus1 channel");
-        //     }
-        // }catch(Exception e){
-        //     e.printStackTrace();
-        // }
-    }
-
-    @Override
-    public void readingLoop() {
-
+        for(DataContainer dc : myComponentList) {
+            if(bms.getID() == "bms") this.bms = dc;
+        }
     }
 
     /**
@@ -112,12 +96,6 @@ public class Lithiumate extends Gatherer {
     @Override
     public void setUp() {
         ProcessBuilder processBuilder = new ProcessBuilder();
-        //processBuilder.redirectErrorStream(true);
-        // NOTA: primero hay que iniciar el can com en comando 'stty -F /dev/serial0 raw 9600 cs8 clocal -cstopb'
-        // (9600 es el baud rate)
-    
-        //stringBuilder.append("cd ./src/main/java/ApplicationLayer/SensorReading/CANReaders/linux-can-utils;");
-        //stringBuilder.append("gcc candump.c lib.c -o candump;"); // Comment this on second execution, no need to recompile
         processBuilder.command("sudo", "/sbin/ip", "link" , "set", "vcan1", "up", "type", "can", "bitrate", "500000");
         try {
             processBuilder.start();
@@ -155,12 +133,6 @@ public class Lithiumate extends Gatherer {
     public void parseMessage(String message) {
         //String[] msg = Utils.split(message, " "); // Better performance split than String.split()
         String[] msg = message.split("\\s+"); // Better performance split than String.split()
-
-        // if (msg.length != 16){ // If it isn't CAN-type message
-        //     System.out.println("Message is not CAN-type. Split length is not 16.");
-        //     System.out.println(message);
-        //     return;
-        // }
 
         // Parse HEX strings to byte data type, into local buffer
         int L = Character.getNumericValue(msg[3].charAt(1));

@@ -3,15 +3,15 @@ package gatherers;
 import java.util.List;
 
 /*
- * Recibe una lista de channels, un delay en ms y ejecuta secuencialmente los channels separados
- * por el delay.
+ * Recibe una lista de {@link Gatherer} y los ejecuta secuencialmente.
+ 
  */
-public class ChannelRunner implements Runnable {
+public class GathererRunner implements Runnable {
 
     public List<Gatherer> channels;
     public int delay;
 
-    public ChannelRunner(List<Gatherer> channels, int delay) {
+    public GathererRunner(List<Gatherer> channels, int delay) {
         this.channels = channels;
         this.delay = delay;
         for(Gatherer c : channels) {

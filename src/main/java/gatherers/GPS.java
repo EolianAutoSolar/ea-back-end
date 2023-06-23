@@ -1,13 +1,8 @@
 package gatherers;
 
-import services.Service;
 import utils.Utils;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
-
 import datacontainers.DataContainer;
 
 public class GPS extends Gatherer {
@@ -21,45 +16,9 @@ public class GPS extends Gatherer {
      * @param myComponentList List of AppComponent that this Channel update values to
      * @param myServices Services to inform to whenever an AppComponents get updated
      */
-    public GPS(List<DataContainer> myComponentList, List<Service> myServices) {
-        super(myComponentList, myServices);
-        // Check that a BMS AppComponent was supplied
-        // With the exact amount of double[] values as the implementation here
-        try{
-            this.gps = this.myComponentsMap.get("gps"); // Must match name in .xlsx file
-            if(gps != null){
-                int len = gps.len;
-                if(len != this.lenGPS){
-                    throw new Exception("Cantidad de valores de GPS en AppComponent != Cantidad de valores de lectura implementados");
-                }
-            }else{
-                throw new Exception("A GPS AppComponent was not supplied in GPS channel");
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
-
-
-    @Override
-    public void readingLoop() {
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("bash", "-c", "cat /dev/serial0");
-        try {
-            Process process = processBuilder.start();
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(process.getInputStream())
-            );
-            String line;
-            while(true) {
-                while ((line = reader.readLine()) != null) {
-                    parseMessage(line);
-                    super.informServices(); // Call this just after all AppComponent in myComponentList were updated
-                }
-            }
-
-        } catch (IOException  e) {
-            e.printStackTrace();
+    public GPS(List<DataContainer> myComponentList) {
+        for(DataContainer dc : myComponentList) {
+            if(dc.getID() == "gps") this.gps = dc;
         }
     }
 

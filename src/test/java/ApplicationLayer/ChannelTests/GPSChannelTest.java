@@ -28,7 +28,7 @@ public class GPSChannelTest {
                 new String[] {"latitude", "latitude_degree", "latitude_orientation", "longitude", "longitude_degree", "longitude_orientation"});
         ArrayList<DataContainer> lac = new ArrayList<>();
         lac.add(appSender);
-        gpsReader = new GPS(lac, new ArrayList<>());
+        gpsReader = new GPS(lac);
     }
 
     @Test

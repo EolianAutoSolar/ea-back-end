@@ -7,10 +7,10 @@ import services.Service;
 /**
  * Representa como se van a guardar los datos dentro de la ejecución del backend.
  * En general se asocia un componente a una fuente de datos dentro del auto ("bms", "gps") pero
- * su uso es bastante flexible, por ejemplo se podrían mezclar 2 fuentes de datos en un mismo AppComponent.
- * La estructura de cada AppComponent esta fuertemente relacionada con el {@link gatherers.Gatherer}
+ * su uso es bastante flexible, por ejemplo se podrían mezclar 2 fuentes de datos en un mismo DataContainer.
+ * La estructura de cada DataContainer esta fuertemente relacionada con el {@link gatherers.Gatherer}
  * que va a leer sus datos asociados.
- * Cada AppComponent tiene un State del protocolo asociado (necesario para la comunicación inalámbrica).
+ * Cada DataContainer tiene un State del protocolo asociado (necesario para la comunicación inalámbrica).
  */
 public class DataContainer {
     /** ID del Componente. */
@@ -23,7 +23,7 @@ public class DataContainer {
     public String[] nombreParametros;
     /** Valor de cada parámetro. */
     public double[] valoresRealesActuales;  // Valores reales provenientes de lecturas reales. Se actualizan cada vez
-    /** Cantidad de parámetro que guarda el AppComponent */
+    /** Cantidad de parámetro que guarda el DataContainer */
     public int len;                         // Deducido. Se calcula una vez. Número de valores en componente. Se usa en varios for()
     /** @deprecated  */
     LinkedList<Service> mySubscriptions;    // Servicios a los que les comunico mis updates
@@ -36,9 +36,9 @@ public class DataContainer {
     }
 
     /**
-     * AppComponent sólo se caracteriza por sus valores mínimos, máximos, y su ID que se usará para muchas cosas (eventos de socket.io por ejemplo).
+     * DataContainer sólo se caracteriza por sus valores mínimos, máximos, y su ID que se usará para muchas cosas (eventos de socket.io por ejemplo).
      * Debe tener asociado un State de la capa inferior.
-     * @param id Nombre del AppComponent
+     * @param id Nombre del DataContainer
      * @param minimosConDecimal Valores mínimos de cada valor del componente
      * @param maximosConDecimal Valores máximos de cada valor del componente
      * @param nombreParametros Nombre de los parámetros del componente actual
@@ -68,7 +68,7 @@ public class DataContainer {
     }
 
     /**
-     * AppComponent se suscribe al servicio indicado
+     * DataContainer se suscribe al servicio indicado
      * @param service Servicio a suscribirse
      */
     public void subscribeToService(Service service){
@@ -86,7 +86,7 @@ public class DataContainer {
     }
 
     /**
-     * Hace un for secuencial para cada servicio, haciendo que usen los datos del AppComponente en forma secuencial.
+     * Hace un for secuencial para cada servicio, haciendo que usen los datos del DataContainere en forma secuencial.
      */
     public void sequentialInformToServices(){
         for (Service s: mySubscriptions
@@ -96,8 +96,8 @@ public class DataContainer {
     }
 
     /**
-     * Retorna el ID del AppComponent (= ID del State de capa inferior)
-     * @return ID tipo String del AppComponent
+     * Retorna el ID del DataContainer (= ID del State de capa inferior)
+     * @return ID tipo String del DataContainer
      */
     public String getID() {
         return this.ID;

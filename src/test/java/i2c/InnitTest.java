@@ -46,7 +46,7 @@ public class InnitTest {
         
         BMSFenix bms = new BMSFenix();
         byte offset = 0;
-        I2C i2c = new I2C(lac, new ArrayList<>());
+        I2C i2c = new I2C(lac);
 
         for(byte i = 0; i < 10; i++) {
             offset = i;

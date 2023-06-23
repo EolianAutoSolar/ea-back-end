@@ -29,8 +29,7 @@ public class Kelly extends Gatherer {
      * @param myComponentList List of AppComponent that this Channel update values to
      * @param myServices Services to inform to whenever an AppComponents get updated
      */
-    public Kelly(List<DataContainer> myComponentList, List<Service> myServices) {
-        super(myComponentList, myServices);
+    public Kelly(List<DataContainer> myComponentList) {
         this.id = "Canbus0";
     
         for(DataContainer ac : myComponentList) {
@@ -42,9 +41,7 @@ public class Kelly extends Gatherer {
             }
         }
     }
-
-    @Override
-    public void readingLoop() {}
+    
     /**
      * Main reading and parsing loop
      */

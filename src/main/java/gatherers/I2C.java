@@ -33,9 +33,8 @@ public class I2C extends Gatherer{
      * @param myComponentList List of AppComponent that this Channel update values to
      * @param myServices      Services to inform to whenever an AppComponents get updated
      */
-    public I2C(List<DataContainer> myComponentList, List<Service> myServices) {
-        super(myComponentList, myServices);
-
+    public I2C(List<DataContainer> myComponentList) {
+        super();
         for(DataContainer ac : myComponentList) {
             if(ac.getID().toLowerCase().equals("bms")) {
                 bms = ac;
@@ -71,54 +70,51 @@ public class I2C extends Gatherer{
     }
 
     @Override
-    public void readingLoop() {
-        while (true) {
-            try {
-                arduino0.write((byte) ((currentRegister + 1) & 0xFF));
-                Thread.sleep(1000);
-                byte[] data = {(byte) 0b00000000, (byte) 0b00000000, (byte) 0b00000000, (byte) 0b00000000, (byte) 0b00000000, (byte) 0b00000000, (byte) 0b00000000, (byte) 0b00000000};
-                arduino0.read(data, 0, 8);
-                System.out.println(BitOperations.ArraytoString(data));
-                switch (currentRegister + 1){
-                    case 1:
-                        parseMessage100(data);
-                        break;
-                    case 2:
-                        parseMessage101(data);
-                        break;
-                    case 3:
-                        parseMessage102(data);
-                        break;
-                    case 4:
-                        parseMessage081(data);
-                        break;
-                    case 5:
-                        parseMessage082(data);
-                        break;
-                    case 6:
-                        parseMessage036(data);
-                        break;
-                    default:
-                        System.out.println(BitOperations.ArraytoString(data));
-                }
-
-                //parseMessageMPPT(data);
-                Thread.sleep(1000);
-                currentRegister = (currentRegister + 1) % 6; // Ask for next BMS message
-                this.informServices();
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
     public void setUp() {
         try {
             bus = I2CFactory.getInstance(I2CBus.BUS_1);
             arduino0 = bus.getDevice(0x08);
             currentRegister = 0;
         } catch (I2CFactory.UnsupportedBusNumberException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void singleRead() {
+        try {
+            arduino0.write((byte) ((currentRegister + 1) & 0xFF));
+            Thread.sleep(1000);
+            byte[] data = {(byte) 0b00000000, (byte) 0b00000000, (byte) 0b00000000, (byte) 0b00000000, (byte) 0b00000000, (byte) 0b00000000, (byte) 0b00000000, (byte) 0b00000000};
+            arduino0.read(data, 0, 8);
+            System.out.println(BitOperations.ArraytoString(data));
+            switch (currentRegister + 1){
+                case 1:
+                    parseMessage100(data);
+                    break;
+                case 2:
+                    parseMessage101(data);
+                    break;
+                case 3:
+                    parseMessage102(data);
+                    break;
+                case 4:
+                    parseMessage081(data);
+                    break;
+                case 5:
+                    parseMessage082(data);
+                    break;
+                case 6:
+                    parseMessage036(data);
+                    break;
+                default:
+                    System.out.println(BitOperations.ArraytoString(data));
+            }
+
+            //parseMessageMPPT(data);
+            Thread.sleep(1000);
+            currentRegister = (currentRegister + 1) % 6; // Ask for next BMS message
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
