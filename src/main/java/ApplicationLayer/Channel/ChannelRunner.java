@@ -28,7 +28,7 @@ public class ChannelRunner implements Runnable {
                 System.out.println(c.id);
                 c.singleRead();
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(delay);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

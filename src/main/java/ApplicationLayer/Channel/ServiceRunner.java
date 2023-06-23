@@ -20,7 +20,7 @@ public class ServiceRunner implements Runnable {
                 System.out.println(s.id);
                 s.consumeComponents();
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(delay);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

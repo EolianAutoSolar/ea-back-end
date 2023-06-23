@@ -26,10 +26,10 @@ public class MainRefactor {
         boolean dev = false;
         boolean encrypt = false;
         String xbeePort = "/dev/ttyUSB0";
-        // String componentsPath = "/home/pi/Desktop/components/auriga/";
-        String componentsPath = "/home/jayki/Desktop/eolian/components/";
-        // String databasePath = "/home/pi/Desktop/";
-        String databasePath = "/home/jayki/Desktop/eolian/data/";
+        String componentsPath = "/home/pi/Desktop/components/auriga/";
+        // String componentsPath = "/home/jayki/Desktop/eolian/components/";
+        String databasePath = "/home/pi/Desktop/POH/";
+        // String databasePath = "/home/jayki/Desktop/eolian/data/";
         for(int i = 0; i < args.length; i++) {
             try {
                 if(args[i].equals("--dev")) {
@@ -74,27 +74,25 @@ public class MainRefactor {
         //WirelessSender ws = new WirelessSender(components, xbeePort, encrypt);
         //PrintService ps = new PrintService("TX: ");
         WebSocketService wss = new WebSocketService(components);
-        //DatabaseService dbs = new DatabaseService(components, databasePath);
+        DatabaseService dbs = new DatabaseService(components, databasePath);
 
         //services.add(ws);
         //ls.add(ps);
         services.add(wss);
-        //services.add(dbs);
+        services.add(dbs);
 
         List<Channel> channels = new ArrayList<>();
         // Channels
         Canbus1 can1 = new Canbus1(components, services);
         Canbus0 can0 = new Canbus0(components, services);
-        TestChannel tc = new TestChannel(components, services);
-        //channels.add(can1);
-        //channels.add(can0);
-        channels.add(tc);
+        channels.add(can1);
+        channels.add(can0);
 
-        ChannelRunner cr = new ChannelRunner(channels, 1000);
+        ChannelRunner cr = new ChannelRunner(channels, 100);
         Thread channelsThread = new Thread(cr);
         channelsThread.start();
         
-        ServiceRunner sr = new ServiceRunner(services, 1000);
+        ServiceRunner sr = new ServiceRunner(services, 100);
         sr.run();
         // //Canbus0 can0 = new Canbus0(lac, ls, dev);
         // // Main loops

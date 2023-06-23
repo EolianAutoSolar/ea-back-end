@@ -39,7 +39,7 @@ public class Canbus1 extends Channel {
     private final int temperature_sensor_fault_index = 307;       // 28 cells
     private final int resistance_calculation_fault_index = 335;   // 28 cells
     private final int load_fault_index = 363;                     // 28 cells
-    private final int idMessage = 502;
+    private final int idMessage = 1282;// 0x502;
 
     /**
      * Constructor de clase, cada canal tiene componentes predefinidos
@@ -50,6 +50,12 @@ public class Canbus1 extends Channel {
     public Canbus1(List<AppComponent> myComponentList, List<Service> myServices) {
         super(myComponentList, myServices);
         this.id = "Canbus1";
+        for(AppComponent ac : myComponentList) {
+            System.out.println(ac.getID());
+            if(ac.getID().equals("bms")) {
+                bms = ac;
+            }
+        }
         // Check that a BMS AppComponent was supplied
         // With the exact amount of double[] values as the implementation here
         // try{
@@ -78,9 +84,9 @@ public class Canbus1 extends Channel {
      */
     @Override
     public void singleRead() {
-        long maxDelay = 1000;
+        long maxDelay = 800;
         ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("candump", "vcan1", "-T", "900");
+        processBuilder.command("candump", "can1", "-T", maxDelay+"");
         try {
             Process process = processBuilder.start();
             BufferedReader reader = new BufferedReader(
@@ -117,7 +123,7 @@ public class Canbus1 extends Channel {
     
         //stringBuilder.append("cd ./src/main/java/ApplicationLayer/SensorReading/CANReaders/linux-can-utils;");
         //stringBuilder.append("gcc candump.c lib.c -o candump;"); // Comment this on second execution, no need to recompile
-        processBuilder.command("sudo", "/sbin/ip", "link" , "set", "vcan1", "up", "type", "can", "bitrate", "500000");
+        processBuilder.command("sudo", "/sbin/ip", "link" , "set", "can1", "up", "type", "can", "bitrate", "500000");
         try {
             processBuilder.start();
         } catch (IOException e) {
@@ -168,7 +174,6 @@ public class Canbus1 extends Channel {
             data[i] = Integer.parseInt(msg[4+i], 16);
         }
         int mensaje = Integer.parseInt(msg[2], 16);
-
         switch (mensaje){
             case idMessage:
                 // State of system
