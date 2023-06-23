@@ -2,55 +2,42 @@ package ApplicationLayer.LocalServices;
 
 import ApplicationLayer.AppComponents.AppComponent;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
 
 /**
- * Guarda en archivos .csv, el estado actual de todos los {@link ApplicationLayer.AppComponents} presentes en la ejecución del programa.
- * El formato en el que guarda los datos es el mismo en el cual se reciben los .csv para cada AppComponent, más una columna asociada al Timestamp del registro.
+ * Guarda en tablas de postgresql, el estado actual de todos los {@link ApplicationLayer.AppComponents} presentes en la ejecución del programa.
+ * El formato en el que guarda los datos es el mismo en el cual se reciben los .csv para cada AppComponent, más una columna asociada al Timestamp del registro, la cual se crea por defecto en la database.
  */
 
 public class DatabaseService extends Service implements Runnable {
 
-    public String absolute_path; // path to /data folder
     public String[] components;
-    public String date_dir; // path to /data/{date} folder
+    private Connection conn;//Crea una conexion que usara todo el tiempo
 
-    public DatabaseService(List<AppComponent> lac, String out_dir) {
+    public DatabaseService(List<AppComponent> lac, String port) {
         super(lac);
         this.id = "Database";
 
-        // absolute_path = System.getProperty("user.dir") + out_dir + "/data";
-        absolute_path = out_dir + "/data";
+        //Setea todos los datos para la conexion
+        String connectUrl = "jdbc:postgresql://localhost:" + port + "/" + System.getenv("DB_NAME");
+        Properties props = new Properties();
+        props.setProperty("user", System.getenv("DB_USER"));
+        props.setProperty("password", System.getenv("DB_PASSWORD"));
 
-        SimpleDateFormat formatter = new SimpleDateFormat("dd_MM_yyyy_HH_mm_ss");
-        Date date = new Date();
-
-
-        date_dir = absolute_path + "/" + formatter.format(date);
-
-        // creates a file object with specified path
-        new File(date_dir).mkdirs();
-
-        /*
-        iniciar los .csv de todos los componentes o esperar a que llamen initDataLog
-        
-         */
-        for(AppComponent ac : lac) {
-            try {
-                initDataLog(ac.nombreParametros, ac.getID());
-            }
-            catch(IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            this.conn = DriverManager.getConnection(connectUrl, props);//Abre la conexion
+        } catch(SQLException e) {
+            e.printStackTrace();
         }
+
     }
-    
 
     /**
      * Debe tomar el AppComponent y guardar sus valores en su tabla respectiva en la base de datos
@@ -65,7 +52,6 @@ public class DatabaseService extends Service implements Runnable {
         }
         try {
             // INSERT double[] en su tabla, sacar el timestamp del momento en que guarda
-            // en este punto ya se debio haber llamado a initDataLog con los argumentos correspondientes
             writeValues(c.getValoresRealesActuales(), c.getID());
 
         } catch (Exception e) {
@@ -74,46 +60,44 @@ public class DatabaseService extends Service implements Runnable {
     }
 
     /**
-     * Inicia un .csv en la carpeta "data/date/" con el nombre {ID}.csv. Le agrega una fila con los valores de values.
-     *
-     * @param values Valores a agregar, en general deberían ser headers.
-     * @param ID     Nombre del archivo de salida
-     * @throws IOException
+     * Añade una fila a la tabla ID con los valores de "values".
+     * @param values Valores a agregar.
+     * @param ID Nombre de la tabla
      */
-    public void initDataLog(String[] values, String ID) throws IOException { //ver cuando llamar a initDataLog
-        String fileName = date_dir + "/" + ID + ".csv"; // el filename sera el mismo id?;
-        FileWriter fileWriter = new FileWriter(fileName, true); // append = true
-        PrintWriter printWriter = new PrintWriter(fileWriter);
+    public void writeValues(double[] values, String ID) {
 
-        printWriter.print("TIMESTAMP;");
+        try {
+            //Crea la query que se usara, los ? representan valores seteables
+            String query = "INSERT INTO " + ID + " VALUES (DEFAULT";
+            for(int i = 0; i < values.length; i++) {
+                query += ",?";
+            }
+            query += ");";
 
-        for (int i = 0; i < values.length - 1; i++) {
-            printWriter.printf("%s;", values[i]);
+            //Se abre el statement con la query
+            PreparedStatement stat = this.conn.prepareStatement(query);
+            //Se ingresan los elementos
+            for(int i = 0; i < values.length; i++) {
+                stat.setDouble(i+1, values[i]);
+            }
+
+            //Se ejecuta la query y se cierra el statement
+            stat.executeUpdate();
+            stat.close();
+        } catch(SQLException e) {
+            e.printStackTrace();
         }
-        printWriter.printf("%s\n", values[values.length - 1]);
-
-        printWriter.close();
     }
 
     /**
-     * Añade una fila a ID.csv con los valores de "values".
-     * @param values Valores a agregar.
-     * @param ID Nombre del archivo a modificar.
-     * @throws IOException
+     * Cierra la conneccion creada con la database.
      */
-    public void writeValues(double[] values, String ID) throws IOException, InterruptedException {
-        String fileName = date_dir+"/"+ID+".csv"; // el filename sera el mismo id?;
-        FileWriter fileWriter = new FileWriter(fileName, true); // append = true
-        PrintWriter printWriter = new PrintWriter(fileWriter);
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS"); //esto hay que revisarlo en concreto con la bd
-        Date date = new Date();
-        printWriter.print(formatter.format(date)+";");
-
-        for(int i = 0; i < values.length-1; i++) {
-            printWriter.printf("%f;", values[i]);
+    public void close() {
+        try {
+            //Se cierra la conexion
+            this.conn.close();
+        } catch(SQLException e) {
+            e.printStackTrace();
         }
-        printWriter.printf("%f\n", values[values.length-1]);
-
-        printWriter.close();
     }
 }

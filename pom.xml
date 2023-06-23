@@ -81,6 +81,13 @@
             <version>${kotlin.version}</version>
         </dependency>
 
+        <!-- Connector para base de datos postresql -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.27</version>
+        </dependency>
+
     </dependencies>
 
     <build>
