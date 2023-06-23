@@ -73,12 +73,12 @@ public class MainRefactor {
         //WirelessSender ws = new WirelessSender(components, xbeePort, encrypt);
         //PrintService ps = new PrintService("TX: ");
         WebSocketService wss = new WebSocketService(components);
-        //DatabaseService dbs = new DatabaseService(components, databasePort);
+        DatabaseService dbs = new DatabaseService(components, databasePort);
 
         //services.add(ws);
         //ls.add(ps);
         services.add(wss);
-        //services.add(dbs);
+        services.add(dbs);
 
         List<Channel> channels = new ArrayList<>();
         // Channels
