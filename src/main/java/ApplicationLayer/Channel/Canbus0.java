@@ -48,13 +48,14 @@ public class Canbus0 extends Channel {
     /**
      * Main reading and parsing loop
      */
+
     @Override
     public void singleRead() {
-        Thread reqIzq = new Thread(new KellyRequest("vcan0", "064"));
-        Thread reqDer = new Thread(new KellyRequest("vcan0", "0C8"));
+        Thread reqIzq = new Thread(new KellyRequest("can0", "064"));
+        Thread reqDer = new Thread(new KellyRequest("can0", "0C8"));
         //
-        long maxDelay = 1500;
-        String[] command = {"candump", "vcan0,0cd:7FF,069:7FF", "-T 900"};
+        long maxDelay = 200;
+        String[] command = {"candump", "can0,0cd:7FF,069:7FF", "-T", maxDelay+""};
         // Init sphere.py
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         try {
@@ -83,7 +84,7 @@ public class Canbus0 extends Channel {
                     System.out.println(line);
                     parseMessage(line, msg);
                     msg++;
-                    msg = msg % 8;
+                    msg = msg % 10;
                 }
             }
         }catch (Exception e) {
@@ -102,7 +103,7 @@ public class Canbus0 extends Channel {
         // (9600 es el baud rate)
         //stringBuilder.append("cd ./src/main/java/ApplicationLayer/SensorReading/CANReaders/linux-can-utils;");
         //stringBuilder.append("gcc candump.c lib.c -o candump;"); // Comment this on second execution, no need to recompile
-        processBuilder.command("sudo", "/sbin/ip", "link" , "set", "vcan0", "up", "type", "can", "bitrate", "1000000");
+        processBuilder.command("sudo", "/sbin/ip", "link" , "set", "can0", "up", "type", "can", "bitrate", "1000000");
         try {
             processBuilder.start();
         } catch (IOException e) {
@@ -134,85 +135,73 @@ public class Canbus0 extends Channel {
 
         switch (msgNumber){
             case 0:
-                // Kelly izq CCP_A2D_BATCH_READ1
-                System.out.println("Kelly izq CCP_A2D_BATCH_READ1");
-                kellyIzq.valoresRealesActuales[0] = data[0]; // Brake A/D
-                kellyIzq.valoresRealesActuales[1] = data[1]; // TPS A/D
-                kellyIzq.valoresRealesActuales[2] = data[2]; // Operation voltage A/D
-                kellyIzq.valoresRealesActuales[3] = data[3]; // Vs A/D
-                kellyIzq.valoresRealesActuales[4] = data[4]; // B+ A/D
-                break;
-            case 1:
                 // Kelly izq CCP_A2D_BATCH_READ2
                 System.out.println("Kelly izq CCP_A2D_BATCH_READ2");
-                kellyIzq.valoresRealesActuales[5] = data[0];  // Ia A/D
-                kellyIzq.valoresRealesActuales[6] = data[1];  // Ib A/D
-                kellyIzq.valoresRealesActuales[7] = data[2];  // Ic A/D
-                kellyIzq.valoresRealesActuales[8] = data[3];  // Va A/D
-                kellyIzq.valoresRealesActuales[9] = data[4];  // Vb A/D
-                kellyIzq.valoresRealesActuales[10] = data[5]; // Vc A/D
+                kellyIzq.valoresRealesActuales[0] = data[0];  // Ia A/D
+                kellyIzq.valoresRealesActuales[1] = data[1];  // Ib A/D
+                kellyIzq.valoresRealesActuales[2] = data[2];  // Ic A/D
+                kellyIzq.valoresRealesActuales[3] = data[3];  // Va A/D
+                kellyIzq.valoresRealesActuales[4] = data[4];  // Vb A/D
+                kellyIzq.valoresRealesActuales[5] = data[5]; // Vc A/D
                 break;
-            case 2:
+            case 1:
                 // Kelly izq CCP_MONITOR1
                 System.out.println("Kelly izq CCP_MONITOR1");
-                kellyIzq.valoresRealesActuales[11] = data[0]; // PWM
-                kellyIzq.valoresRealesActuales[12] = data[1]; // enable motor rotation
-                kellyIzq.valoresRealesActuales[13] = data[2]; // motor temperature
-                kellyIzq.valoresRealesActuales[14] = data[3]; // Controller's temperature
-                kellyIzq.valoresRealesActuales[15] = data[4]; // temperature of high side FETMOS heat sink
-                kellyIzq.valoresRealesActuales[16] = data[5]; // temperature of low side FETMOS heat sink
+                kellyIzq.valoresRealesActuales[8] = data[0]; // PWM
+                kellyIzq.valoresRealesActuales[9] = data[1]; // enable motor rotation
+                kellyIzq.valoresRealesActuales[10] = data[2]; // motor temperature
+                kellyIzq.valoresRealesActuales[11] = data[3]; // Controller's temperature
                 break;
-            case 3:
+            case 2:
                 // Kelly izq CCP_MONITOR2
                 System.out.println("Kelly izq CCP_MONITOR2");
                 // RPM: data[0] -> MSB of mechanical speed in RPM,      
                 //      data[1] -> LSB of mechanical speed in RPM
-                kellyIzq.valoresRealesActuales[17] = (data[0] << 8) | data[1];
-                kellyIzq.valoresRealesActuales[18] = data[2]; // present current accounts for percent of the rated current of controller
+                kellyIzq.valoresRealesActuales[6] = (data[0] << 8) | data[1];
                 // Error code: data[3] -> MSB of error code,      
                 //             data[4] -> LSB of error code
-                kellyIzq.valoresRealesActuales[19] = (data[3] << 8) | data[4];
+                kellyIzq.valoresRealesActuales[7] = (data[3] << 8) | data[4];
                 break;
+            case 3:
+                System.out.println("Kelly izq COM_SW_ACC");
+                kellyIzq.valoresRealesActuales[12] = data[0];
             case 4:
-                // Kelly der CCP_A2D_BATCH_READ1
-                System.out.println("Kelly der CCP_A2D_BATCH_READ1");
-                kellyDer.valoresRealesActuales[0] = data[0]; // Brake A/D
-                kellyDer.valoresRealesActuales[1] = data[1]; // TPS A/D
-                kellyDer.valoresRealesActuales[2] = data[2]; // Operation voltage A/D
-                kellyDer.valoresRealesActuales[3] = data[3]; // Vs A/D
-                kellyDer.valoresRealesActuales[4] = data[4]; // B+ A/D
-                break;
+                System.out.println("Kelly izq COM_SW_REV");
+                kellyIzq.valoresRealesActuales[13] = data[0];
             case 5:
                 // Kelly der CCP_A2D_BATCH_READ2
                 System.out.println("Kelly der CCP_A2D_BATCH_READ2");
-                kellyDer.valoresRealesActuales[5] = data[0];  // Ia A/D
-                kellyDer.valoresRealesActuales[6] = data[1];  // Ib A/D
-                kellyDer.valoresRealesActuales[7] = data[2];  // Ic A/D
-                kellyDer.valoresRealesActuales[8] = data[3];  // Va A/D
-                kellyDer.valoresRealesActuales[9] = data[4];  // Vb A/D
-                kellyDer.valoresRealesActuales[10] = data[5]; // Vc A/D
+                kellyDer.valoresRealesActuales[0] = data[0];  // Ia A/D
+                kellyDer.valoresRealesActuales[1] = data[1];  // Ib A/D
+                kellyDer.valoresRealesActuales[2] = data[2];  // Ic A/D
+                kellyDer.valoresRealesActuales[3] = data[3];  // Va A/D
+                kellyDer.valoresRealesActuales[4] = data[4];  // Vb A/D
+                kellyDer.valoresRealesActuales[5] = data[5]; // Vc A/D
                 break;
             case 6:
                 // Kelly der CCP_MONITOR1
                 System.out.println("Kelly der CCP_MONITOR1");
-                kellyDer.valoresRealesActuales[11] = data[0]; // PWM
-                kellyDer.valoresRealesActuales[12] = data[1]; // enable motor rotation
-                kellyDer.valoresRealesActuales[13] = data[2]; // motor temperature
-                kellyDer.valoresRealesActuales[14] = data[3]; // Controller's temperature
-                kellyDer.valoresRealesActuales[15] = data[4]; // temperature of high side FETMOS heat sink
-                kellyDer.valoresRealesActuales[16] = data[5]; // temperature of low side FETMOS heat sink
+                kellyDer.valoresRealesActuales[8] = data[0]; // PWM
+                kellyDer.valoresRealesActuales[9] = data[1]; // enable motor rotation
+                kellyDer.valoresRealesActuales[10] = data[2]; // motor temperature
+                kellyDer.valoresRealesActuales[11] = data[3]; // Controller's temperature
                 break;
             case 7:
                 // Kelly der CCP_MONITOR2
                 System.out.println("Kelly der CCP_MONITOR2");
                 // RPM: data[0] -> MSB of mechanical speed in RPM,      
                 //      data[1] -> LSB of mechanical speed in RPM
-                kellyDer.valoresRealesActuales[17] = (data[0] << 8) | data[1];
-                kellyDer.valoresRealesActuales[18] = data[2]; // present current accounts for percent of the rated current of controller
+                kellyDer.valoresRealesActuales[6] = (data[0] << 8) | data[1];
                 // Error code: data[3] -> MSB of error code,      
                 //             data[4] -> LSB of error code
-                kellyDer.valoresRealesActuales[19] = (data[3] << 8) | data[4];
+                kellyDer.valoresRealesActuales[7] = (data[3] << 8) | data[4];
                 break;
+            case 8:
+                System.out.println("Kelly der COM_SW_ACC");
+                kellyDer.valoresRealesActuales[12] = data[0];
+            case 9:
+                System.out.println("Kelly der COM_SW_REV");
+                kellyDer.valoresRealesActuales[13] = data[0];
             default:
                 System.out.println("Trama "+msg[0]+" no procesada");
         } // switch

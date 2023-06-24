@@ -11,31 +11,18 @@ public class KellyRequest implements Runnable {
     }
 
     public void run() {
-        // init process builder
-        // start 4 commands to ask for data
-
-        // launch command CCP_A2D_BATCH_READ1
-        ProcessBuilder CCP_A2D_BATCH_READ1 = new ProcessBuilder("cansend", channel, (kellyId + "#1B"));
-        // read output 
-
-        // launch command CCP_A2D_BATCH_READ2
         ProcessBuilder CCP_A2D_BATCH_READ2 = new ProcessBuilder("cansend", channel, (kellyId + "#1A"));
-        
-        // read output 
-
-        // launch command CCP_MONITOR1
         ProcessBuilder CCP_MONITOR1 = new ProcessBuilder("cansend", channel, (kellyId + "#33"));
-        
-        // read output 
-
-        // launch command CCP_MONITOR2
         ProcessBuilder CCP_MONITOR2 = new ProcessBuilder("cansend", channel, (kellyId + "#37"));
+        ProcessBuilder COM_SW_ACC = new ProcessBuilder("cansend", channel, (kellyId + "#42"));
+        ProcessBuilder COM_SW_REV = new ProcessBuilder("cansend", channel, (kellyId + "#44"));
         
         try {
-            CCP_A2D_BATCH_READ1.start();
             CCP_A2D_BATCH_READ2.start();
             CCP_MONITOR1.start();
             CCP_MONITOR2.start();
+            COM_SW_ACC.start();
+            COM_SW_REV.start();
         } catch(Exception e) {
             e.printStackTrace();
         }
