@@ -8,29 +8,31 @@ import com.pi4j.system.SystemInfo;
 import datacontainers.DataContainer;
 import datacontainers.ExcelToAppComponent.CSVToAppComponent;
 import gatherers.GathererRunner;
+import gatherers.Kelly;
+import gatherers.Lithiumate;
 import gatherers.Gatherer;
 import gatherers.NullChannel;
 import services.Service;
 import services.ServiceRunner;
 import services.WebSocketServer;
 import services.WirelessService.WirelessReceiver;
+import services.DatabaseService;
+import gatherers.GathererRunner;
 
 public class Receiver {
 
     public static void main(String[] args) throws Exception {
         boolean encrypt = false;
         String xbeePort = "/dev/ttyUSB0";
-        // String componentsPath = "/home/pi/Desktop/components/auriga/";
-        String componentsPath = "/home/jayki/Desktop/eolian/components/";
-        // String databasePath = "/home/pi/Desktop/";
-        String databasePath = "/home/jayki/Desktop/eolian/data/";
+        String componentsPath = "/home/pi/Desktop/components/auriga/";
+        String databasePort = "5432";
         for(int i = 0; i < args.length; i++) {
             try {
                 if(args[i].equals("--xbee")) {
                     xbeePort = args[i+1];
                 }
-                else if(args[i].equals("--out")) {
-                    databasePath = args[i+1];
+                else if(args[i].equals("--database")) {
+                    databasePort = args[i+1];
                 }
                 else if(args[i].equals("--in")) {
                     componentsPath = args[i+1];
@@ -42,7 +44,7 @@ public class Receiver {
             catch (ArrayIndexOutOfBoundsException e) {
                 System.out.println("Usage: java -jar Main.jar [OPTIONS]");
                 System.out.println("Options: --xbee <port>");
-                System.out.println("         --out <path>");
+                System.out.println("         --database <port>");
                 System.out.println("         --in <path>");
                 System.out.println("         --dev");
                 System.out.println("         --encrypt");
@@ -64,24 +66,25 @@ public class Receiver {
         List<Service> services = new ArrayList<>();
         WirelessReceiver receiver = new WirelessReceiver(components, encrypt, services);
         WebSocketServer wss = new WebSocketServer();
+        DatabaseService dbs = new DatabaseService(components, databasePort);
         //DatabaseService dbs = new DatabaseService(components, databasePath);
 
         services.add(receiver);
         services.add(wss);
-        //services.add(dbs);
+        services.add(dbs);
 
         List<Gatherer> channels = new ArrayList<>();
         // Channels
-        NullChannel nc = new NullChannel(components);
-        //channels.add(can1);
-        //channels.add(can0);
-        channels.add(nc);
+        Lithiumate can1 = new Lithiumate(components);
+        Kelly can0 = new Kelly(components);
+        channels.add(can1);
+        channels.add(can0);
 
-        GathererRunner cr = new GathererRunner(channels, 1000);
+        GathererRunner cr = new GathererRunner(channels, 300);
         Thread channelsThread = new Thread(cr);
         channelsThread.start();
         
-        ServiceRunner sr = new ServiceRunner(services, 1000);
+        ServiceRunner sr = new ServiceRunner(services, 100);
         sr.run();
         // //Canbus0 can0 = new Canbus0(lac, ls, dev);
         // // Main loops

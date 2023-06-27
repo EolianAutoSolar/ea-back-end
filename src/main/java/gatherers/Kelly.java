@@ -47,11 +47,11 @@ public class Kelly extends Gatherer {
      */
     @Override
     public void singleRead() {
-        Thread reqIzq = new Thread(new KellyRequest("vcan0", "064"));
-        Thread reqDer = new Thread(new KellyRequest("vcan0", "0C8"));
+        Thread reqIzq = new Thread(new KellyRequest("can0", "064"));
+        Thread reqDer = new Thread(new KellyRequest("can0", "0C8"));
         //
-        long maxDelay = 1500;
-        String[] command = {"candump", "vcan0,0cd:7FF,069:7FF", "-T 900"};
+        long maxDelay = 300;
+        String[] command = {"candump", "can0,0cd:7FF,069:7FF", "-T", maxDelay+""};
         // Init sphere.py
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         try {
@@ -99,7 +99,7 @@ public class Kelly extends Gatherer {
         // (9600 es el baud rate)
         //stringBuilder.append("cd ./src/main/java/ApplicationLayer/SensorReading/CANReaders/linux-can-utils;");
         //stringBuilder.append("gcc candump.c lib.c -o candump;"); // Comment this on second execution, no need to recompile
-        processBuilder.command("sudo", "/sbin/ip", "link" , "set", "vcan0", "up", "type", "can", "bitrate", "1000000");
+        processBuilder.command("sudo", "/sbin/ip", "link" , "set", "can0", "up", "type", "can", "bitrate", "1000000");
         try {
             processBuilder.start();
         } catch (IOException e) {

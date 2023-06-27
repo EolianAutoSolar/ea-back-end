@@ -42,7 +42,7 @@ public class Lithiumate extends Gatherer {
     private final int temperature_sensor_fault_index = 307;       // 28 cells
     private final int resistance_calculation_fault_index = 335;   // 28 cells
     private final int load_fault_index = 363;                     // 28 cells
-    private final int idMessage = 502;
+    private final int idMessage = 1282;// 0x502;
 
     /**
      * Constructor de clase, cada canal tiene componentes predefinidos
@@ -63,9 +63,9 @@ public class Lithiumate extends Gatherer {
      */
     @Override
     public void singleRead() {
-        long maxDelay = 1000;
+        long maxDelay = 800;
         ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("candump", "vcan1", "-T", "900");
+        processBuilder.command("candump", "can1", "-T", maxDelay+"");
         try {
             Process process = processBuilder.start();
             BufferedReader reader = new BufferedReader(
@@ -141,7 +141,6 @@ public class Lithiumate extends Gatherer {
             data[i] = Integer.parseInt(msg[4+i], 16);
         }
         int mensaje = Integer.parseInt(msg[2], 16);
-
         switch (mensaje){
             case idMessage:
                 // State of system
