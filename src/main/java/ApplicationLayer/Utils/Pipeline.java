@@ -3,7 +3,7 @@ package ApplicationLayer.Utils;
 import ApplicationLayer.Channel.Channel;
 import ApplicationLayer.Channel.ServiceRunner;
 
-public class Pipeline extends Thread {
+public class Pipeline implements Runnable {
     public void Pipeline(Channel channel, ServiceRunner serviceRunner){
         this.channel = channel;
         this.serviceRunner = serviceRunner;

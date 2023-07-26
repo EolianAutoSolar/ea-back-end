@@ -13,12 +13,13 @@ import ApplicationLayer.Channel.CanbusKelly;
 import ApplicationLayer.Channel.Channel;
 import ApplicationLayer.Channel.ChannelRunner;
 import ApplicationLayer.Channel.ServiceRunner;
-import ApplicationLayer.Channel.SphereChannel;
+import ApplicationLayer.Channel.KellyRequest;
 import ApplicationLayer.Channel.TestChannel;
 import ApplicationLayer.LocalServices.DatabaseService;
 import ApplicationLayer.LocalServices.Service;
 import ApplicationLayer.LocalServices.WebSocketService;
 import ApplicationLayer.LocalServices.WirelessService.WirelessSender;
+import ApplicationLayer.Utils.Pipeline;
 
 public class MainRefactor {
 
@@ -79,19 +80,27 @@ public class MainRefactor {
         services.add(wss);
         services.add(dbs);
 
-        List<Channel> channels = new ArrayList<>();
         // Channels
-        Canbus1 can1 = new Canbus1(components, services);
         Canbus0 can0 = new Canbus0(components, services);
-        channels.add(can1);
-        channels.add(can0);
+        Canbus1 can1 = new Canbus1(components, services);
+        can0.setUp()
+        can1.setUp()
 
-        ChannelRunner cr = new ChannelRunner(channels, 300);
-        Thread channelsThread = new Thread(cr);
-        channelsThread.start();
-        
+        //Manda los mensaje al canal del kelly
+        KellyRequest kr = new KellyRequest("can0", {"064", "0C8"});
+
+        //Crea el service Runner
         ServiceRunner sr = new ServiceRunner(services, 100);
-        sr.run();
+
+        //Crea los pipeline
+        Pipeline p0 = new Pipeline(can0, sr)
+        Pipeline p1 = new Pipeline(can1, sr)
+
+        //Crea los threads para ejecucion
+        Thread t1 = new Thread(kr);
+        Thread t2 = new Thread(p0);
+        Thread t3 = new Thread(p1);
+
         // //Canbus0 can0 = new Canbus0(lac, ls, dev);
         // // Main loops
         // Thread t1 = new Thread(can1);

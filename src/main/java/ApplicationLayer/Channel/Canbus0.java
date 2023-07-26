@@ -23,6 +23,7 @@ public class Canbus0 extends Channel {
 
     private AppComponent kellyIzq;
     private AppComponent kellyDer;
+    private int msg;
     /**
      * Each channel has predefined AppComponents
      *
@@ -50,42 +51,18 @@ public class Canbus0 extends Channel {
      */
     @Override
     public void singleRead() {
-        Thread reqIzq = new Thread(new KellyRequest("can0", "064"));
-        Thread reqDer = new Thread(new KellyRequest("can0", "0C8"));
-        //
-        long maxDelay = 300;
         String[] command = {"candump", "can0,0cd:7FF,069:7FF", "-T", maxDelay+""};
         // Init sphere.py
-        ProcessBuilder processBuilder = new ProcessBuilder(command);
         try {
+            ProcessBuilder processBuilder = new ProcessBuilder(command);
             Process process = processBuilder.start();
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(process.getInputStream())
-                    );
-            reqIzq.start();
-            reqIzq.join();
-            reqDer.start();
-            reqDer.join();
-            String line;
-            int msg = 0;
-            long initialTime = System.currentTimeMillis();
-            // while ((line = reader.readLine()) != null) {
-                while (true) {
-                    if(System.currentTimeMillis() - initialTime >= maxDelay) {
-                        System.out.println("Time passed");
-                        process.destroy();
-                        break;
-                    }
-                line = reader.readLine();
-                // Hacer algo
-                if(line != null) {
-                    System.out.println("read");
-                    System.out.println(line);
-                    parseMessage(line, msg);
-                    msg++;
-                    msg = msg % 8;
-                }
-            }
+            );
+            String line = reader.readLine();
+            parseMessage(line, msg);
+            msg++;
+            msg = msg % 8;
         }catch (Exception e) {
             e.printStackTrace();
         }
