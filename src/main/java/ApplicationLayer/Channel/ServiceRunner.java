@@ -14,23 +14,23 @@ public class ServiceRunner implements Runnable {
     }
 
     public void runServices() {
-        while(true) {
-            for(Service s : services) {
-                System.out.println("Executing service ");
-                System.out.println(s.id);
-                s.consumeComponents();
-                try {
-                    Thread.sleep(delay);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+        for(Service s : services) {
+            System.out.println("Executing service ");
+            System.out.println(s.id);
+            s.consumeComponents();
         }
     }
 
     @Override
     public void run() {
-        runServices();
+        while(true){
+            runServices();
+            try {
+                Thread.sleep(delay);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
     
 }

@@ -84,28 +84,15 @@ public class Canbus1 extends Channel {
      */
     @Override
     public void singleRead() {
-        long maxDelay = 800;
         ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("candump", "can1", "-T", maxDelay+"");
+        processBuilder.command("candump", "can1", "-n 1");
         try {
             Process process = processBuilder.start();
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(process.getInputStream())
             );
-            String line;
-            long initialTime = System.currentTimeMillis();
-            while(true){
-                if(System.currentTimeMillis() - initialTime >= maxDelay) {
-                    System.out.println("Time passed");
-                    process.destroy();
-                    break;
-                }
-                line = reader.readLine();
-                if(line != null) {
-                    System.out.println(line);
-                    parseMessage(line);
-                }
-            }
+            String line = reader.readLine();
+            parseMessage(line);
         }catch (Exception e) {
             e.printStackTrace();
         }
