@@ -1,13 +1,9 @@
 package gatherers;
 
-import services.Service;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
-
-import javax.xml.crypto.Data;
 
 import datacontainers.DataContainer;
 

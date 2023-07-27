@@ -1,15 +1,11 @@
 package services.WirelessService;
 
-import services.WirelessService.PresentationLayer.Encryption.CryptoAdmin;
-import services.WirelessService.PresentationLayer.Packages.Initializer;
 import services.WirelessService.PresentationLayer.Packages.State;
 import services.WirelessService.Utilities.BitOperations;
 import services.WirelessService.ZigBeeLayer.XbeeReceiver;
 import services.WirelessService.ZigBeeLayer.XbeeSender;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import datacontainers.DataContainer;

@@ -9,7 +9,7 @@ public class GPS extends Gatherer {
     private double[] data = new double[6];
 
     public DataContainer gps;
-    private final int lenGPS = 6;
+    
     /**
      * Each channel has predefined AppComponents
      *

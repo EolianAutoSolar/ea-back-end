@@ -1,7 +1,5 @@
 package services;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.sql.Connection;

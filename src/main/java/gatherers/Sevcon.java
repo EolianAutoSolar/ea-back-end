@@ -1,10 +1,5 @@
 package gatherers;
 
-import services.Service;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
 
 import datacontainers.DataContainer;
@@ -13,7 +8,6 @@ public class Sevcon extends Gatherer {
     private int[] data = new int[8]; // Memory efficient buffer
 
     private DataContainer sevcon;
-    private final int lenSEVCON = 32; // Hardcoded, specific, actual values updated in this implementation for this Component
 
     private final int message_100_index = 3; // 3 data
     private final int message_200_index = 0; // 3 data

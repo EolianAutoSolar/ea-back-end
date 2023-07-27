@@ -11,13 +11,11 @@ import gatherers.GathererRunner;
 import gatherers.Kelly;
 import gatherers.Lithiumate;
 import gatherers.Gatherer;
-import gatherers.NullChannel;
 import services.Service;
 import services.ServiceRunner;
 import services.WebSocketServer;
 import services.WirelessService.WirelessReceiver;
 import services.DatabaseService;
-import gatherers.GathererRunner;
 
 public class Receiver {
 

@@ -24,15 +24,10 @@ public class Sender {
         String xbeePort = "/dev/ttyUSB0";
         // String componentsPath = "/home/pi/Desktop/components/auriga/";
         String componentsPath = "/home/jayki/Desktop/eolian/components/";
-        // String databasePath = "/home/pi/Desktop/";
-        String databasePath = "/home/jayki/Desktop/eolian/data/";
         for(int i = 0; i < args.length; i++) {
             try {
                 if(args[i].equals("--xbee")) {
                     xbeePort = args[i+1];
-                }
-                else if(args[i].equals("--out")) {
-                    databasePath = args[i+1];
                 }
                 else if(args[i].equals("--in")) {
                     componentsPath = args[i+1];
