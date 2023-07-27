@@ -2,7 +2,6 @@ package Main;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.pi4j.system.SystemInfo;
 
 import ApplicationLayer.AppComponents.AppComponent;
@@ -83,23 +82,28 @@ public class MainRefactor {
         // Channels
         Canbus0 can0 = new Canbus0(components, services);
         Canbus1 can1 = new Canbus1(components, services);
-        can0.setUp()
-        can1.setUp()
+        can0.setUp();
+        can1.setUp();
 
         //Manda los mensaje al canal del kelly
-        KellyRequest kr = new KellyRequest("can0", {"064", "0C8"});
+        KellyRequest kr = new KellyRequest("can0");
 
         //Crea el service Runner
         ServiceRunner sr = new ServiceRunner(services, 100);
 
         //Crea los pipeline
-        Pipeline p0 = new Pipeline(can0, sr)
-        Pipeline p1 = new Pipeline(can1, sr)
+        Pipeline p0 = new Pipeline(can0, sr);
+        Pipeline p1 = new Pipeline(can1, sr);
 
         //Crea los threads para ejecucion
         Thread t1 = new Thread(kr);
         Thread t2 = new Thread(p0);
         Thread t3 = new Thread(p1);
+
+        //Ejecucion de los threads
+        t1.start();
+        t2.start();
+        t3.start();
 
         // //Canbus0 can0 = new Canbus0(lac, ls, dev);
         // // Main loops

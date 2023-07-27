@@ -1,18 +1,20 @@
 package ApplicationLayer.Channel;
 
+
 public class KellyRequest implements Runnable {
 
     public String channel;
-    public String kellyId;
+    public String[] kellyIds = {"068", "0C8"};
 
-    public KellyRequest(String channel, String[] kellyIds) {
-        this.channel = channel;
-        this.kellyId = kellyId;
+    //Recibe una strig con el channel y un arreglo de strings con los ids de todos los kellys disponibles en el canal.
+    public KellyRequest(String channel) {
+        channel = channel;
     }
 
     public void run() {
         // init process builder
         // start 4 commands to ask for data
+        // Bucle for que ejecuta las 4 consultas para cada kelly.
         for(String kellyId : kellyIds){
 
             // launch command CCP_A2D_BATCH_READ1

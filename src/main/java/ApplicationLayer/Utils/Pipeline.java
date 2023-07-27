@@ -4,15 +4,18 @@ import ApplicationLayer.Channel.Channel;
 import ApplicationLayer.Channel.ServiceRunner;
 
 public class Pipeline implements Runnable {
+    public Channel channel;
+    public ServiceRunner serviceRunner;
     public void Pipeline(Channel channel, ServiceRunner serviceRunner){
-        this.channel = channel;
-        this.serviceRunner = serviceRunner;
+        channel = channel;
+        serviceRunner = serviceRunner;
     }
 
+    //Ejecuta de manera secuencial un singleRead y luego los servicios.
     public void runPipeline(){
         while(true) {
-            this.channel.singleRead();
-            this.serviceRunner.runServices();
+            channel.singleRead();
+            serviceRunner.runServices();
         }
     }
 

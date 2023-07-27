@@ -18,6 +18,7 @@ public class Canbus1 extends Channel {
     private int[] data = new int[8]; // Memory efficient buffer
 
     private AppComponent bms;
+    private ProcessBuilder processBuilder = new ProcessBuilder("candump", "can1", "-n 1");
     private final int lenBMS = 391; // Hardcoded, specific, actual values updated in this implementation for this Component
 
     private final int message_622_index = 0; // 31 data
@@ -84,13 +85,13 @@ public class Canbus1 extends Channel {
      */
     @Override
     public void singleRead() {
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("candump", "can1", "-n 1");
         try {
+            //Ejecuta una sola lectura y espera hasta que esta llegue
             Process process = processBuilder.start();
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(process.getInputStream())
             );
+            //traduce el mensaje
             String line = reader.readLine();
             parseMessage(line);
         }catch (Exception e) {

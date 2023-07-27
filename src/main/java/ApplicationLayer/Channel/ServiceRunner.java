@@ -13,6 +13,7 @@ public class ServiceRunner implements Runnable {
         this.delay = delay;
     }
 
+    //Ejecuta los servicios una sola vez
     public void runServices() {
         for(Service s : services) {
             System.out.println("Executing service ");

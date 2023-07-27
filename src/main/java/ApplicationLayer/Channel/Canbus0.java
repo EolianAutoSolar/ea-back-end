@@ -24,6 +24,8 @@ public class Canbus0 extends Channel {
     private AppComponent kellyIzq;
     private AppComponent kellyDer;
     private int msg;
+    private ProcessBuilder processBuilder = new ProcessBuilder("candump", "can0,0cd:7FF,069:7FF", "-n 1");
+
     /**
      * Each channel has predefined AppComponents
      *
@@ -51,16 +53,17 @@ public class Canbus0 extends Channel {
      */
     @Override
     public void singleRead() {
-        String[] command = {"candump", "can0,0cd:7FF,069:7FF", "-T", maxDelay+""};
         // Init sphere.py
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder(command);
+            //Ejecuta una sola lectura y espera hasta que esta llegue
             Process process = processBuilder.start();
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(process.getInputStream())
             );
+            //traduce el mensaje
             String line = reader.readLine();
             parseMessage(line, msg);
+            //Luego del parseado cambia el puntero del mensaje
             msg++;
             msg = msg % 8;
         }catch (Exception e) {
